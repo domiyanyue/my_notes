@@ -22,6 +22,9 @@ It's proven to be extremely scalable and become one of the fundataion of Interne
 
 ## Strong Consistency
 
-After a write, reads will see it. Data is **replicated syncrhonously**.  
-This approach is seen in file systems and RDMBSes. **Strong consistency** works well in **systems that need transactions**.
+After a write, reads will see it. Data is **replicated syncrhonously**. It is also called **immediate consistency** which means
+that data viewed immediately after an update will be constent for all observers of the entity.  
+This approach is seen in file systems and RDMBSes. **Strong consistency** works well in **systems that need transactions**.  
+To have strong consistency, the application must compromise on the scalability and performance. Data has to be locked during period of update or replication process to ensure that no other processes are update the same data.
+
 
