@@ -9,7 +9,7 @@ Increasing performance in general means serving more units of work, but it can a
 be to handle larger units of work, such as when datasets grow.* 
 
 ## Latency vs Throughput
-**Latency** is the amount of time needed to perform a single task.
+**Latency** is the amount of time needed to perform a single task.  
 **Throughput** is number of tasks system can perfrom per unit of time.
 Generally, we should aim for maximum throughput with acceptable latency.
 
