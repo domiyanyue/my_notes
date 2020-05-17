@@ -16,6 +16,11 @@ fter a write, reads will evetuanlly see it.
 Data is **replicated asynchronously**.  
 This approach is seen in systems such as DNS and email. Eventual consistency works well in **highly available systems**.
 
+<p align="center"> 
+<img src="images/system_design_consistency_pattern/evetual_consistency.png?raw=true"/> <br>
+<em>Fig. 1: Eventual Consistency</em>
+</p>
+
 ### Eventual Consistency Example: DNS Server
 DNS servers do not nessesarily refelct the lastest value. It takes a while to replicated modified value to all DNS clients and servers. 
 It's proven to be extremely scalable and become one of the fundataion of Internet.
@@ -26,5 +31,10 @@ After a write, reads will see it. Data is **replicated syncrhonously**. It is al
 that data viewed immediately after an update will be constent for all observers of the entity.  
 This approach is seen in file systems and RDMBSes. **Strong consistency** works well in **systems that need transactions**.  
 To have strong consistency, the application must compromise on the scalability and performance. Data has to be locked during period of update or replication process to ensure that no other processes are update the same data.
+
+<p align="center"> 
+<img src="images/system_design_consistency_pattern/strong_consistency.png?raw=true"/> <br>
+<em>Fig. 2: Strong Consistency</em>
+</p>
 
 
