@@ -12,9 +12,13 @@ during connection loss.
 
 ## Eventual Consistency
 
-Client side **can't loss data, wait time does not have to be super fast**. After a write, reads will evetuanlly see it.
+fter a write, reads will evetuanlly see it.
 Data is **replicated asynchronously**.  
 This approach is seen in systems such as DNS and email. Eventual consistency works well in **highly available systems**.
+
+### Eventual Consistency Example: DNS Server
+DNS servers do not nessesarily refelct the lastest value. It takes a while to replicated modified value to all DNS clients and servers. 
+It's proven to be extremely scalable and become one of the fundataion of Internet.
 
 ## Strong Consistency
 
