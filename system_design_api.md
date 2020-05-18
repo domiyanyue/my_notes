@@ -138,5 +138,25 @@ type Conversation {
 * REST resources: Easy
 * GraphQL quereis: ???
 
+## What API to use? 
+### Use case: Management API
+* Focus on objects or resources
+* Many varies clients
+* Discoverability and documentation
+Consider: **REST**
 
+### Use case: Command API
+* Action oritented
+* Simple interactions
+Consider: **RPC**
+
+### Use case: Internal Micro Services
+* High Message Rate
+* Low overhead
+Consider: **RPC or REST** 
+
+### Use case: Data or Mobile API
+* Data is graph-like
+* Optimize for high latency
+Consider: **GraphQL**
 
