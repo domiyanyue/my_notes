@@ -69,4 +69,39 @@ GET https://api.example.io/
 2. Big payloads and "chattiness"
 
 ## GraphQL
-Instead of modeling functions (RPC) or resources (REST)
+Instead of modeling functions (RPC) or resources (REST), modeling **query**
+Fundamental unit for GraphQL is query. 
+*Ask for exactly what you want*
+
+### GraphQL Example
+```
+type Query {
+  listConversations: [Conversation]
+}
+
+type Mutation {
+  sendMessage(text: String): Message
+}
+
+type Conversation {
+  id: Int
+  title: String
+  messages: [Message]
+}
+
+```
+
+### Advantage of GraphQL
+1. Low network overhead
+2. Typed schema
+3. Fits graph-like data very well
+
+### Disadvantage of GraphQL
+1. Complexity
+2. Caching
+3. Versioning
+4. Still early
+
+
+
+
