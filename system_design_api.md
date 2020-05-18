@@ -102,6 +102,41 @@ type Conversation {
 3. Versioning
 4. Still early
 
+## Comparison
+### Coupling
+* RPC functions: High
+* REST resources: Low
+* GraphQL quereis: Medium
+
+### Chattiness
+* RPC functions: Medium
+* REST resources: High
+* GraphQL quereis: Low
+
+### Client complexity
+* RPC functions: Low
+* REST resources: Low
+* GraphQL quereis: High
+
+### Cognitive Complexity
+* RPC functions: Low
+* REST resources: Low
+* GraphQL quereis: High
+
+### Caching
+* RPC functions: Custom
+* REST resources: HTTP
+* GraphQL quereis: Custom
+
+### Discoverability
+* RPC functions: Bad
+* REST resources: Good
+* GraphQL quereis: Good
+
+### Versioning
+* RPC functions: Hard
+* REST resources: Easy
+* GraphQL quereis: ???
 
 
 
