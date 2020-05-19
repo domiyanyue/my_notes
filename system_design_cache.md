@@ -12,3 +12,10 @@ Hash the query as a key and store the result to the cache. This approach suffers
 
 ## Caching at Object Level
 See your data as an object, similar to what you do with application code. 
+
+## When to update the cache
+
+### Cache-aisde (Lazy-loading)
+Only requested datat is cached, avoiding filling up the cache with datat that isn't required. 
+
+
