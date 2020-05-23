@@ -48,4 +48,33 @@ Now we have a high level view of the overall process. This part is to execute ea
 DPC++ compiler.
 
 
+### Emulation Compile
+```bash
+dpcpp -fintelfpga <source_files> -o <executable_name>
+```
+Notice -fintelfpga is a magic flag that ecapsulate special recipes for FPGA including but not limited to:
+* Do AOT (ahead-of-time) compilation instead of JIT.
+* Support Intel FPGA language extensions.
+* Generate intemediate files that's suitable for FPGA development flow.
 
+### Generating Performace Report
+```bash
+dpcpp -fintelfpga -fsycl-link <source_files> -o <output> -Xshardware
+```
+The difference here is a new flag "-fsycl-link" and "-Xshardware". 
+* -fsycl-link: What this flag does is to generate device code (code running on FPGA)
+and stop at the point where there is enough information for performance report.
+* -Xshardware: targeting FPGA hardware image instead of emulation.  
+
+The output of this command has 2 parts:
+* output.a (linux)/.lib (Windows): an archieve for intermediate files dumped at this stage. 
+* output.prj: a folder containing a HTML based performace report in `output./prj/reports/report.html` 
+
+### Create FPGA images
+```bash
+# Resume from previous steps
+dpcpp -fintelfpga output.a/lib -o <executable> -Xshardware
+# Start from source file
+dpcpp -fintelfpga <source files> -o <executable> -Xshardware
+```
+The user can resume from previous intermediate files or directly from source file. 
