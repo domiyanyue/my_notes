@@ -17,14 +17,26 @@ type, it's mostly used on GPUs, this article's examples will focus on GPU.
 
 ## Key OpenCL Concepts
 
-### Global and Local Dimensions
+### Global Dimensions
 * **global dimensions**: a 1D/2D/3D paralelelism defined for each kernel execution.
 * **work-item**: a thread executed for every point in the global dimensions.
 
-| Example  | Global Dimension                  | Work Items |
-|----------|-----------------------------------|------------|
-| 1k audio | 1024 (1D global dimension)        | 1024       |
-| HD Video | 1920 x 1080 (2D global dimension) | 2M         |
+| Example            | Global Dimension | Work Items |
+|--------------------|------------------|------------|
+| 1k audio           | 1024 (1D)        | 1024       |
+| HD Video           | 1920 x 1080 (2D) | 2M         |
+| HD per line        | 1080 (1D)        | 1080       |
+| HD per 8 x 8 block | 240 x 135 (2D)   | 32K        |
+
+### Local Dimensions
+The global dimensions are broken down evenly into **local work-groups**
+If global dimensions is 100 x 512
+Possible glocal dimensions are 10 x 8, 100 x 1, 50 x 2, 2 x 128
+  
+Each **work-group** is logically exectued together on one compute unit.  
+Synchronization is only allowed between **work-items** in the same **work-group**.
+
+
 
 
 
