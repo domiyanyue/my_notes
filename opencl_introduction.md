@@ -69,11 +69,11 @@ Basic C99 +
 * **get_local_size(), get_local_id(), get_num_groups(), get_group_id()**
 
 ## OpenCL Architecture
-**OpenCL Platforms**: Navida platform, Intel platform, AMD platform
+* **OpenCL Platforms**: Navida platform, Intel platform, AMD platform
 Different platforms support different devices.
-**OpenCL Devices**: Each device has device global memory and device compute units
-**OpenCL Contexts**: defines what devices can share data object, a group of devices, all devices in a context must be in the same platform. 
-**OpenCL Command Queues**: 
+* **OpenCL Devices**: Each device has device global memory and device compute units
+* **OpenCL Contexts**: defines what devices can share data object, a group of devices, all devices in a context must be in the same platform. 
+* **OpenCL Command Queues**: 
 
 
 
