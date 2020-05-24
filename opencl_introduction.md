@@ -56,6 +56,24 @@ void kernel calSin(global float *data) {
 }
 ```
 
+### Kernel Lannguages
+Basic C99 + 
+* vectors
+* rounding and conversions
+* intrinsic functions (math)
+
+#### Utility functions
+* **get_global_id(dim)** : get current work-item's ID in a particular dimension
+* **get_work_dim()**
+* **get_global_size(dim)**
+* **get_local_size(), get_local_id(), get_num_groups(), get_group_id()**
+
+## OpenCL Runtime Architecture
+
+
+
+
+
 
 
 
