@@ -36,6 +36,27 @@ Possible glocal dimensions are 10 x 8, 100 x 1, 50 x 2, 2 x 128
 Each **work-group** is logically exectued together on one compute unit.  
 Synchronization is only allowed between **work-items** in the same **work-group**.
 
+## OpenCL Kernels
+**Kernel** is the code that is executed in parallel. Think of it as the "inner loop" of the program.  
+Here is a comparison of computation in C versus OpenCL:  
+C:  
+
+```C
+void calSin(float* data) {
+  for(int id = 0; id < 1024; id ++) {
+    data[id] = sin(data[id]);
+  }
+}
+```
+OpenCL:  
+```C
+void kernel calSin(global float *data) {
+  int id = get_global_id(0);
+  data[id] = sin(data[id]);
+}
+```
+
+
 
 
 
