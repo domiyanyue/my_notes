@@ -7,7 +7,7 @@ new C++ feature you need to know to code in SYCL.
 
 ## Functor
 In C++, sometimes you want to pass in a function as a parameter to another function like defining your
-own sorting algorithm. You can get this behaviour in C++ through function object **functor**.
+own sorting algorithm. You can get this behaviour in C++ through **function object (aka functor)**.
 
 You can define a functor and use it in this way. In the followin example, we define a class called myFunctor
 and overload the operator () to be a function returning sum of 2 parameters passing in.
