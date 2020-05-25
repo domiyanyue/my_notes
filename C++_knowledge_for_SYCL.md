@@ -103,12 +103,14 @@ list if you want a function that takes zero arguments.
 
 *returnTypesDeclaration*: This is the return type. Most of the time, compilers can deduce the return type of the lambda
 expression when you have zero or one return statement. However, if it makes it easier to understand the code, you can
-specify the return type.
+specify the return type. 
 
 *{ lambdaStatements; }*: This is the lambda body. The statements within the lambda body can access the captured variables
 and the parameters.
 
-Let's look at some concrete example to help understand:
+Of the 4 parts, parameter, returnTypeDeclaration and lambdaStatement are very similar to to a normal C++ function's corresponding
+part and needs no further explaination. In the following examples, I will emphase more on *capture* part. 
+
 * Example 1
 ```C++
    auto comparitor = [](const Student &a, const Student &b) { return a.x < b.x; };
