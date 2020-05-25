@@ -35,15 +35,16 @@ attribute age. We define and pass in a functor `comparitor` to std::sort as it r
 ```C++
 #include <vector>
 #include <iostream>
+#include <algorithm>
 
 struct Student {
   int age;
-  Student(int x) age(x) {}
+  Student(int x): age(x) {}
 };
 
 struct MyCompare { 
    bool operator()(const Student &a, const Student &b) {
-       return a.x < b.x;
+       return a.age < b.age;
    }
 };
 
