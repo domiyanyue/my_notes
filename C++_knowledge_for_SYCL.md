@@ -58,6 +58,10 @@ int main(){
 ```
 We can contruct functor when pass in function without declare it:
 ```C++
+  // Simplify Code:
+  // MyCompare comparitor;
+  // std::sort(vecStudent.begin(), vecStudent.end(), comparitor);
+  // To:
   std::sort(vecStudent.begin(), vecStudent.end(), MyCompare{});
 ```
 
