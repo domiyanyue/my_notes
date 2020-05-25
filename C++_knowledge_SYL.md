@@ -111,10 +111,19 @@ and the parameters.
 Let's look at some concrete example to help understand:
 * Example 1
 ```C++
-   auto comparitor = [](const Student &a, const Student &b) { return a.x < b.y; };
+   auto comparitor = [](const Student &a, const Student &b) { return a.x < b.x; };
+```
+One detail we notice is the type of a lamdba expression is auto. In fact it's a compile-time generated type, as user we
+always put auto when declare it. Here the lambda expression captures nothing and take 2 parameters, the return type is
+automatically deduced by the compile based on expression inside lambda body. If we want to be more explict on return type, 
+we can write it as:
+```C++
+    auto comparitor = [](const Student &a, const Student &b) -> bool { return a.x < b.x; };
 ```
 
-* Example 2
+Capture is a new concept, it provides an easy way to pass in parameters with the scope to lambda expression. 
+
+
 
 ## template keyword
 
