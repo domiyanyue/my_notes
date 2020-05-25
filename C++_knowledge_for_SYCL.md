@@ -109,9 +109,9 @@ specify the return type.
 and the parameters.
 
 Of the 4 parts, parameter, returnTypeDeclaration and lambdaStatement are very similar to to a normal C++ function's corresponding
-part and needs no further explaination. In the following examples, I will emphase more on *capture* part. 
+part. Let's look at some examples:
 
-* Example 1
+* Example 1 : Compile deduce return type
 ```C++
    auto comparitor = [](const Student &a, const Student &b) { return a.x < b.x; };
 ```
@@ -123,11 +123,35 @@ we can write it as:
     auto comparitor = [](const Student &a, const Student &b) -> bool { return a.x < b.x; };
 ```
 
-Capture is a new concept, it provides an easy way to pass in parameters with the scope to lambda expression. 
+The capture clause here is `[]` which means it does not capture any variable.
 
+* Example 2 : basic capture example 
+Following example showed basic syntax of capture. 
+```C++
+    int x = 1;
+    int y = 2;
+    int z = 3;
+    auto func1 = [&](){};    // (1), default capture by reference
+    auto func2 = [=](){};    // (2), default capture by copy
+    auto func3 = [&,x](){};  // (3), default capture by reference, except x by copy
+    auto func4 = [=,&x](){}; // (4), default capture by copy, excep x by reference
+```
+As we can see, we can specify the default capture mode using & (by reference) or =(by value) and specific capture for certain
+variables. In example (3). y and z are captured by reference and x is by value.
 
-
-## template keyword
+* Example 3: capture example using this
+*this* keyworkd can be used in capture clause to reprent by-refernce copy of the current object. Check following example, the lambda 
+expression set the value of object's attribute x to 2.
+```C++
+struct S {
+    int x;
+    void f() {
+        auto func = [this](){x = 2;};
+        func();
+    }
+};
+```
+C++ lambda a new feature in C++11 and has been constantly involving in C++14/17/20. Here we only introduced the basics.
 
 
 
