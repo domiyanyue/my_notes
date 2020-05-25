@@ -55,7 +55,7 @@ int main(){
   return 0;
 }
 ```
-Sometimes we contruct functor when pass in function without declare it like:
+We can contruct functor when pass in function without declare it:
 ```C++
   std::sort(vecStudent.begin(), vecStudent.end(), MyCompare{});
 ```
