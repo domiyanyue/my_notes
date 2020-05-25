@@ -29,7 +29,8 @@ int main(){
 }
 ```
 A more complicated and real word example to use functor is when we want to customize a comparison function
-in std::sort.
+in std::sort. In the following example, we need a customized function to compare 2 Student struct according to
+attribute age. We define and pass in a functor `comparitor` to std::sort as it requires. 
 
 ```C++
 #include <vector>
@@ -48,12 +49,16 @@ struct MyCompare {
 
 int main(){
   std::vector<Student> vecStudent{{1}, {3}, {2}};
-  std::sort(vecStudent.begin(), vecStudent.end(), MyCompare);
+  MyCompare comparitor;
+  std::sort(vecStudent.begin(), vecStudent.end(), comparitor);
   std::cout << vecStudent[1].age;
   return 0;
 }
 ```
-
+Sometimes we contruct functor when pass in function without declare it like:
+```C++
+  std::sort(vecStudent.begin(), vecStudent.end(), MyCompare{});
+```
 
 ## lambda expression
 
