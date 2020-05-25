@@ -5,7 +5,7 @@ For a lot of new comers who are somehow familiar with C/C++03, some language fea
 lambda expressions are not obvous. This article will help you go through the basics of
 new C++ feature you need to know to code in SYCL.
 
-## functor
+## Functor
 In C++, sometimes you want to pass in a function as a parameter to another function like defining your
 own sorting algorithm. You can get this behaviour in C++ through function object **functor**.
 
@@ -60,7 +60,61 @@ Sometimes we contruct functor when pass in function without declare it like:
   std::sort(vecStudent.begin(), vecStudent.end(), MyCompare{});
 ```
 
+In SYCL, we need to use functor to wrap around device code.
+
 ## lambda expression
+Lambda expression is a syntactic short-cut for functor, you can replace functor with lambda
+expression. With lambda expression, usually you can write less code. Think about the previous
+student example, in order to do comparison, we added some boilerplate code. Using lambda expression
+can simply:
+```C++
+# using functor
+struct MyCompare { 
+   bool operator()(const Student &a, const Student &b) {
+       return a.x < b.x;
+   }
+};
+...
+  MyCompare comparitor;
+  std::sort(vecStudent.begin(), vecStudent.end(), comparitor);
+```
+to:
+```C++
+# using lambda
+   auto comparitor = [](const Student &a, const Student &b) { return a.x < b.y; };
+   std::sort(vecStudent.begin(), vecStudent.end(), comparitor);
+```
+or:
+```C++
+    std::sort(vecStudent.begin(), vecStudent.end(), [](const Student &a, const Student &b) { return a.x < b.y; });
+```
+Now let's look into the details of lambda expression.
+The basic syntax for lambda expression looks like:
+```
+[ captures ] (parameters) -> returnTypesDeclaration { lambdaStatements; }
+```
+*\[capture\]*: The capture clause, also known as the lambda introducer, specifies which outside variables are available
+for the lambda function and whether they should be captured by value (copying) or by reference. You will always be able
+to identify the start of a lambda expression with the presence of the capture clause. An empty capture clause [] means
+capture nothing, in which case the lambda expression body doesn't access variables in the enclosing scope. 
+
+*parameters*: This is the optional parameters list, also known as the lambda declarator. You can omit the parameters
+list if you want a function that takes zero arguments.
+
+*returnTypesDeclaration*: This is the return type. Most of the time, compilers can deduce the return type of the lambda
+expression when you have zero or one return statement. However, if it makes it easier to understand the code, you can
+specify the return type.
+
+*{ lambdaStatements; }*: This is the lambda body. The statements within the lambda body can access the captured variables
+and the parameters.
+
+Let's look at some concrete example to help understand:
+* Example 1
+```C++
+   auto comparitor = [](const Student &a, const Student &b) { return a.x < b.y; };
+```
+
+* Example 2
 
 ## template keyword
 
