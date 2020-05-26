@@ -1,16 +1,16 @@
-# C++ feature you need to know for SYCL development
+# C++ feature SYCL developper should know : Functor and Lambda 
 
-SYCL is built on top of C++11, with feature support for C++14 and C++17.
-For new comers who are somehow familiar with C/C++03 but not newer C++ version, 
-some language features like lambda expressions can be unfamiliar. This article will help you go through the basics of
-new C++ feature you need to know to code in SYCL.
+SYCL is built on top of C++11. New features in C++11 such as functor and lambda expression are widely used in
+SYCL to perform daily tasks such as creating a kernel. Every SYCL developer should know it before getting started.
 
 ## Functor
-In C++, sometimes you want to pass in a function as a parameter to another function like defining your
-own sorting algorithm. You can get this behaviour in C++ through **function object (aka functor)**.
+In software development, sometimes you want to pass in a function as a parameter to another function like
+defining your own sorting algorithm. C has function pointer to solve this but it suffers from serveral limitations.
+C++ improved in by adding **function object (aka functor)**.
 
-You can define a functor and use it in this way. In the followin example, we define a class called myFunctor
-and overload the operator () to be a function returning sum of 2 parameters passing in.
+**Essentially, functor is an instance of a class/struct which overloads operator().**  This way, the object(instance)
+can be used like a function call. Check the following example where we define a class MyFunctor and create an object my_functor
+as a functor.
 
 ```C++
 #include <iostream>
@@ -28,6 +28,33 @@ int main(){
     return 0;
 }
 ```
+In main function, the usage of my_functor looks just like a function which is how operator() works. In this example,
+it seems unnecessary to use functor since it's such a simple function call. One use case of functor is to add state to
+the class to make each functor behaves differently:
+
+```C++
+#include <iostream>
+
+class myFunctor
+{   
+    private:
+        int base = 0;
+    public:
+        myFunctor (int x) : base(x) {}
+        int operator() (int x, int y) { return x + y + base; }
+};
+
+int main(){
+    myFunctor my_functor_1(2);
+    myFunctor my_functor_2(10);
+    std::cout << my_functor_1(1,2) << std::endl;
+    std::cout << my_functor_2(1,2) << std::endl;
+    return 0;
+}
+```
+In this example, we add attribute base to myFunctor. In each object, the value of base is different, thus each represent
+a independent functor. 
+
 A more complicated and real word example to use functor is when we want to customize a comparison function
 in std::sort. In the following example, we need a customized function to compare 2 Student struct according to
 attribute age. We define and pass in a functor `comparitor` to std::sort as it requires. 
