@@ -28,7 +28,7 @@ int main(){
     return 0;
 }
 ```
-In main function, the usage of my_functor looks just like a function which is how operator() works. In this example,
+In main function, the usage of my_functor looks just like a function which is basically how operator() works. In this example,
 it seems unnecessary to use functor since it's such a simple function call. One use case of functor is to add state to
 the class to make each functor behaves differently:
 
@@ -52,10 +52,10 @@ int main(){
     return 0;
 }
 ```
-In this example, we add attribute base to myFunctor. In each object, the value of base is different, thus each represent
-a independent functor. 
+In this example, we add attribute base to myFunctor. Each functor created based on the class is different due to
+their internal state, in this case, the value of `base`.
 
-A more complicated and real word example to use functor is when we want to customize a comparison function
+A more complicated and real-world example is to use functor when we want to customize a comparison function
 in std::sort. In the following example, we need a customized function to compare 2 Student struct according to
 attribute age. We define and pass in a functor `comparitor` to std::sort as it requires. 
 
@@ -92,36 +92,24 @@ We can contruct functor when pass in function without declare it:
   std::sort(vecStudent.begin(), vecStudent.end(), MyCompare{});
 ```
 
-In SYCL, we need to use functor to wrap around device code.
+However, to create a new class and overload its operator doesn't seems like a easy job
+to represent a function. That's why lambda expression is proposed.
 
 ## lambda expression
-Lambda expression is a syntactic short-cut for functor, you can replace functor with lambda
-expression. With lambda expression, usually you can write less code. Think about the previous
-student example, in order to do comparison, we added some boilerplate code. Using lambda expression
-can simply:
+Lambda expression is a syntactic short-cut for functor. **The return value of a lambda expression is a functor**.
+Let's revisit the sorting code above. Most of the code we add including definition of the class, declaration of overload
+operator() function and instance creating are boilerplate code. With lambda expression, we can simplify the code a lot:
 ```C++
-# using functor
-struct MyCompare { 
-   bool operator()(const Student &a, const Student &b) {
-       return a.x < b.x;
-   }
-};
-...
-  MyCompare comparitor;
-  std::sort(vecStudent.begin(), vecStudent.end(), comparitor);
-```
-to:
-```C++
-# using lambda
+// using lambda expression
    auto comparitor = [](const Student &a, const Student &b) { return a.x < b.y; };
    std::sort(vecStudent.begin(), vecStudent.end(), comparitor);
 ```
-or:
+or 
 ```C++
     std::sort(vecStudent.begin(), vecStudent.end(), [](const Student &a, const Student &b) { return a.x < b.y; });
 ```
-Now let's look into the details of lambda expression.
-The basic syntax for lambda expression looks like:
+
+The basic syntax for lambda expression is:
 ```
 [ captures ] (parameters) -> returnTypesDeclaration { lambdaStatements; }
 ```
