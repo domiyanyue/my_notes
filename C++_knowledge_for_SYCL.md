@@ -179,8 +179,8 @@ As you can see, lambda expression makes the code shorter and more elegant especi
 In comparison, a class defined functor is more useful when it aims to be reused and configured multiple times.
 
 ## Summary
-We learn the basics of functor and lambda expression in C++:
-1. Functor is an instance of class which overloads operator(). It can be used like a function. 
-2. Lambda expression returns a functor. It removes boilerplate code when we just want to call a function once. 
+We learn the basics of functor and lambda expression in C++:  
+1. Functor is an instance of class which overloads operator(). It can be used like a function.   
+2. Lambda expression returns a functor. It removes boilerplate code when we just want to call a function once.   
 3. Compared to normal functions, lambda expression has a capture clause, which provides a flexible way to interact
-with variables in the scope.
+with variables in the scope. 
