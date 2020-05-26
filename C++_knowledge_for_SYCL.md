@@ -157,19 +157,30 @@ variables. In example (3). y and z are captured by reference and x is by value. 
 is by reference.  
 The machnism of capture list simply the senario where we want to pass an argument that is in current scope.
 
-* Example 3: capture example using this
-*this* keyworkd can be used in capture clause to reprent by-refernce copy of the current object. Check following example, the lambda 
-expression set the value of object's attribute x to 2.
+* Example 3: Use lambda expression in STL library
+We already see how lambda can be used in `std::sort`. In STL library, a lot of utility functions provides API for lambda, In
+the following example, we will use `std::count_if` to count the number of element in the array that is larger than `x`.
 ```C++
-struct S {
-    int x;
-    void f() {
-        auto func = [this](){x = 2;};
-        func();
-    }
-};
+#include <vector>
+#include <iostream>
+#include <algorithm>
+
+int count_larger_x(std::vector<int>& vec, int x) {
+    return std::count_if(vec.begin(), vec.end(), [=](int v){return v > x;});
+}
+
+int main(){
+  std::vector<int> vec{1,2,3,4,5,6,7,8};
+  std::cout << count_larger_x(vec, 4);
+  return 0;
+}
 ```
-C++ lambda a new feature in C++11 and has been constantly involving in C++14/17/20. Here we only introduced the basics.
+Lambda expression can help simplify the code as you can tell especially when the function is only used once.
+In comparison, a class defined functor is more useful when it aims to be reused and configured.
 
-
-
+## Summary
+We learn the basics of functor and lambda expression in C++:
+1. Functor is an instance of class which overloads operator(). It can be called like a function.
+2. Lambda expression return a functor. It simplifis the code when used.
+3. Compare to normal functions, lambda expression has a capture list, which provides a fexible and short way to interact
+with variables in the scope.
