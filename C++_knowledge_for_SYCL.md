@@ -1,13 +1,10 @@
 # C++ features SYCL developer should know: Functor and Lambda Expression
 
-SYCL is built on top of C++11. New features in C++11 such as functor and lambda expressions are widely used in
+In software development, sometimes you want to pass in a function as a parameter to another function like
+defining your own comparison function for sorting algorithm. C uses function pointers to solve this but it suffers from several limitations. C++ (in C++11) improved it by adding **function objects (aka functors)** and **Lambda expression**. They are used in
 SYCL to perform daily tasks such as creating a kernel. Every SYCL developer should know it before getting started.
 
 ## Functor
-In software development, sometimes you want to pass in a function as a parameter to another function like
-defining your own sorting algorithm. C uses function pointers to solve this but it suffers from several limitations.
-C++ improved it by adding **function objects (aka functors)**.
-
 **Essentially, functor is an instance of a class/struct which overloads operator().**  This way, the object(instance)
 can be used like a function call. Check the following example where we define a class MyFunctor and create an object my_functor
 as a functor.
