@@ -1,12 +1,12 @@
 # C++ feature SYCL developper should know : Functor and Lambda 
 
-SYCL is built on top of C++11. New features in C++11 such as functor and lambda expression are widely used in
+SYCL is built on top of C++11. New features in C++11 such as functor and lambda expressions are widely used in
 SYCL to perform daily tasks such as creating a kernel. Every SYCL developer should know it before getting started.
 
 ## Functor
 In software development, sometimes you want to pass in a function as a parameter to another function like
-defining your own sorting algorithm. C has function pointer to solve this but it suffers from serveral limitations.
-C++ improved in by adding **function object (aka functor)**.
+defining your own sorting algorithm. C uses function pointers to solve this but it suffers from several limitations.
+C++ improved it by adding **function objects (aka functors)**.
 
 **Essentially, functor is an instance of a class/struct which overloads operator().**  This way, the object(instance)
 can be used like a function call. Check the following example where we define a class MyFunctor and create an object my_functor
@@ -28,8 +28,8 @@ int main(){
     return 0;
 }
 ```
-In main function, the usage of my_functor looks just like a function which is basically how operator() works. In this example,
-it seems unnecessary to use functor since it's such a simple function call. One use case of functor is to add state to
+In the `main` function, the usage of my_functor looks just like a function which is basically how operator() works. In this example,
+it seems unnecessary to use functor since it's such a naive function call. One use case of functor is to add state to
 the class to make each functor behaves differently:
 
 ```C++
@@ -52,7 +52,7 @@ int main(){
     return 0;
 }
 ```
-In this example, we add attribute base to myFunctor. Each functor created based on the class is different due to
+In this example, we add an attribute base to myFunctor. Each functor created based on the class is different due to
 their internal state, in this case, the value of `base`.
 
 A more complicated and real-world example is to use functor when we want to customize a comparison function
@@ -83,7 +83,7 @@ int main(){
   return 0;
 }
 ```
-We can contruct functor when pass in function without declare it:
+We can construct functor when pass in function without declare it:
 ```C++
   // Simplify Code:
   // MyCompare comparitor;
@@ -92,10 +92,10 @@ We can contruct functor when pass in function without declare it:
   std::sort(vecStudent.begin(), vecStudent.end(), MyCompare{});
 ```
 
-However, to create a new class and overload its operator doesn't seems like a easy job
-to represent a function. That's why lambda expression is proposed.
+However, to create a new class and overload its operator doesn't seem like an elegant way to create a temporary  function. 
+That's why the lambda expression is proposed.
 
-## lambda expression
+## lambda Expression
 Lambda expression is a syntactic short-cut for functor. **The return value of a lambda expression is a functor**.
 Let's revisit the sorting code above. Most of the code we add including definition of the class, declaration of overload
 operator() function and instance creating are boilerplate code. With lambda expression, we can simplify the code a lot:
@@ -131,9 +131,9 @@ Let's look at some examples:
 ```C++
    auto comparitor = [](const Student &a, const Student &b) { return a.x < b.x; };
 ```
-One detail we notice is the type of a lamdba expression is auto. In fact it's a compile-time generated type, as developer we
-always put `auto` when declare it. Here the lambda expression captures nothing and take 2 parameters, the return type is
-automatically deduced by the compile based on expression inside lambda body. If we want to be more explict on return type, 
+One detail we notice is the type of a lambda expression is `auto`. In fact it's a compile-time generated type, as developer we
+always put `auto` when declare it. Here the lambda expression captures nothing and takes 2 parameters. The return type is
+automatically deduced by the compiler based on expressions inside the lambda body. If we want to be more explicit on return type, 
 we can write it as:
 ```C++
     auto comparitor = [](const Student &a, const Student &b) -> bool { return a.x < b.x; };
@@ -155,11 +155,11 @@ Following example showed basic syntax of capture.
 As we can see, we can specify the default capture mode using & (by reference) or =(by value) and specific capture for certain
 variables. In example (3). y and z are captured by reference and x is by value. In example (4), y and z are captured by value and x
 is by reference.  
-The machnism of capture list simply the senario where we want to pass an argument that is in current scope.
+The mechanism of capture clause simplifies the scenario where we want to pass an argument that is in current scope.
 
 * Example 3: Use lambda expression in STL library
-We already see how lambda can be used in `std::sort`. In STL library, a lot of utility functions provides API for lambda, In
-the following example, we will use `std::count_if` to count the number of element in the array that is larger than `x`.
+We already see how lambda can be used in `std::sort`. In the C++ STL library, a lot of utility functions provide an API for functors, In
+the following example, we will use `std::count_if` to count the number of elements in the array that is larger than `x`.
 ```C++
 #include <vector>
 #include <iostream>
@@ -175,12 +175,12 @@ int main(){
   return 0;
 }
 ```
-Lambda expression can help simplify the code as you can tell especially when the function is only used once.
-In comparison, a class defined functor is more useful when it aims to be reused and configured.
+As you can see, lambda expression makes the code shorter and more elegant especially when the functor is only used once.
+In comparison, a class defined functor is more useful when it aims to be reused and configured multiple times.
 
 ## Summary
 We learn the basics of functor and lambda expression in C++:
-1. Functor is an instance of class which overloads operator(). It can be called like a function.
-2. Lambda expression return a functor. It simplifis the code when used.
-3. Compare to normal functions, lambda expression has a capture list, which provides a fexible and short way to interact
+1. Functor is an instance of class which overloads operator(). It can be used like a function.
+2. Lambda expression returns a functor. It removes boileplate code when we just want to call a function once.
+3. Compared to normal functions, lambda expression has a capture clause, which provides a fexible way to interact
 with variables in the scope.
