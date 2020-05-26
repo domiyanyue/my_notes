@@ -1,4 +1,4 @@
-# C++ feature SYCL developper should know : Functor and Lambda 
+# C++ feature SYCL developer should know : Functor and Lambda 
 
 SYCL is built on top of C++11. New features in C++11 such as functor and lambda expressions are widely used in
 SYCL to perform daily tasks such as creating a kernel. Every SYCL developer should know it before getting started.
@@ -181,6 +181,6 @@ In comparison, a class defined functor is more useful when it aims to be reused 
 ## Summary
 We learn the basics of functor and lambda expression in C++:
 1. Functor is an instance of class which overloads operator(). It can be used like a function.
-2. Lambda expression returns a functor. It removes boileplate code when we just want to call a function once.
-3. Compared to normal functions, lambda expression has a capture clause, which provides a fexible way to interact
+2. Lambda expression returns a functor. It removes boilerplate code when we just want to call a function once.
+3. Compared to normal functions, lambda expression has a capture clause, which provides a flexible way to interact
 with variables in the scope.
