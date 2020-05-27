@@ -1,0 +1,1 @@
+# SYCL Device Memory Model
