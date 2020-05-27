@@ -77,7 +77,13 @@ target host device.
 
 * **Setup Buffers between host and device**:
 ```C++
+      buffer<float, 1> a_sycl(vec_a.data(), ArraySize);
+      buffer<float, 1> b_sycl(vec_b.data(), ArraySize);
+      buffer<float, 1> c_sycl(vec_c.data(), ArraySize);
 ```
+In SYCL a buffer is used to maintain an area of memory that can be shared between the host and one or more devices. Here we instantiate a **buffer type** with two *template arguments*: data type `float` and 
+data dimension `1`. Then we construct a **buffer instance** which takes two arguments: the first is the data and the second is an the number of elements. 
+In this tutorial a buffer object of element type of `float` and dimension 1 with size `ArraySize` is created. 
 
 
 * **Construct Command Queue**:
@@ -85,7 +91,23 @@ target host device.
 ```
 * **Specify Accessors**:
 ```C++
+         auto a_acc = a_sycl.get_access<access::mode::read>(cgh);
+         auto b_acc = b_sycl.get_access<access::mode::read>(cgh);
+         auto c_acc = c_sycl.get_access<access::mode::discard_write>(cgh);
 ```
-* **Kernel Body**:
+
+
+* **Kernel Function**:
 ```C++
+         cgh.parallel_for<class VectorAdd>(range<1>(ArraySize), [=] (item<1> item) {
+            c_acc[item] = a_acc[item] + b_acc[item];
+         });
 ```
+
+## Summary
+In this article, we demonstrate the basics of SYCL by going through a simple example. It covers
+a complete SYCL application including:
+* construct host program
+* write kernel function
+* launch kernel from host
+
