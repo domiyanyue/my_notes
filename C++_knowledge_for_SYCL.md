@@ -1,4 +1,4 @@
-# C++ features SYCL developer should know: Functor and Lambda Expression
+# C++ features every SYCL developer should know: Functor and Lambda Expression
 
 In software development, sometimes you want to pass in a function as a parameter to another function like
 defining your own comparison function for sorting algorithm. C uses function pointers to solve this but it suffers from several limitations. C++ (in C++11) improved it by adding **function objects (aka functors)** and **Lambda expression**. They are used in
