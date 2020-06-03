@@ -10,6 +10,10 @@ A global dimension is a 1D, 2D or 3D parallelism defined for each kernel executi
 Let's take a few example:
 **Example 1.** Processing 1024 audio pieces, each work-item deal with 1 audio piece. In this case the global dimension is 1024 and number of work items is 1024.
 
+<p align="center"> 
+<img src="1_d_global_dimension.png?raw=true"/> <br>
+<em>Fig. 1: Example 1D Global Dimension</em>
+</p>
 
 
 **Example 2.** Processing HD videos of size 1920 x 1080. Depends on the nature of problem and underlying hardware feature, you may come up with different ways to partition the problem. Let's consider 3 cases in which you will use different global dimensions. 
