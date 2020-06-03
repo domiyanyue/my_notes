@@ -7,7 +7,8 @@ I will start this tutorial by explain **global dimension** and **local dimension
 ## Global Dimension
 A global dimension is a 1D, 2D or 3D parallelism defined for each kernel execution. It describes how the whole problem space is paritioned and dispathed to work-item. A work-item (thread) is execute in every point in the global dimension. 
 
-Let's take a few example:
+Let's take a few example:  
+
 **Example 1.** Processing 1024 audio pieces, each work-item deal with 1 audio piece. In this case the global dimension is 1024 and number of work items is 1024.
 
 <p align="center"> 
