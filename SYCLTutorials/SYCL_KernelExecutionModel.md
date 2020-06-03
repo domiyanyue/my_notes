@@ -2,7 +2,7 @@
 
 In order to construct your SYCL device code for fast execution, a clear understanding of how parallelism is specifed is critical. The 2  important concepts are **global dimension** and **local dimension**. Once you know the rational behind them, all related concepts should feel natural. 
 
-I will start this tutorial by explain **global dimension** and **local dimension** first followed by code examples in SYCL to demonstrates how they are applied in SYCL device code.
+I will start this tutorial by explain **global dimension** and **local dimension** first followed by code examples in SYCL to demonstrate how they are applied in SYCL device code.
 
 ## Global Dimension
 A global dimension is a 1D, 2D or 3D parallelism defined for each kernel execution. It describes how the whole problem space is paritioned and dispathed to work-item. A work-item (thread) is execute in every point in the global dimension. 
