@@ -39,9 +39,7 @@ Let's look at some examples:
 <em>Fig. 1: Example 2.3 2D Global Dimension 960 x 540</em>
 </p>
 
-It should be clear to you that global dimension refects how the problem space is divided and assigned to work-items. 
-
-Now we have global dimension and dispatched the problem to each work-items. The execution model is well-defined, right? No yet. Turns out for more complicated problems, there is one thing we haven't consider. That is synchronization between work-items. We can't synchronize 2 work-items selected arbitrarily. The compute units execute threads have to be "physically close enough". This restriction is modeled in SYCL language using with the concept of **local dimension**.
+It should be clear to you at this point, that the choice of **global dimension** dictates how the problem space is divided and dispatched to work-items. The parallelism model is now well-defined, right? Well, not yet. Turns out we haven't considered one essential piece - *synchornization between work-items*. In most multi-core hardwares like GPUs which SYCL runs on top of, 2 arbitrary work-items can't be synchronized easily. Only work-items executes on the same **compute unit** can be synchronized. The hardware restriction lead to the concept of **local dimension**. 
 
 ## Local Dimension
 
