@@ -45,9 +45,10 @@ It should be clear to you at this point, that the choice of **global dimension**
 
 In short, the local dimension breaks down global dimension into **work-groups** and only work-items within the same work-group can be synchronized. 
 
-It is required in SYCL that local dimension size must be divisible by global dimension size in each dimension. For example if I have global dimensions of 32 x 100, I can't choose local  dimension of 18 (not divisible by 32) x 10 or 16 x 15 (not divisible by 100), but values like 16 x 50, 8 x 25 are legal. Each work-group is logically executed together on one **compute unit**. Synchronization is only allowed between work-items within the same work-group. Why? Because hardware is easy to built in this way. This limitation also ask the developers to carefully select work-group size. 
+It is required in SYCL that local dimension size must be divisible by global dimension size in each dimension. For example if I have global dimensions of 32 x 100, I can't choose local dimension of 18 (not divisible by 32) x 10 or 16 x 15 (not divisible by 100), but values like 16 x 50, 8 x 25 are legal. 
 
 Now we understand the rational of global dimension and local dimension. Let's how they look like in SYCL.
+
 
 ## Global Dimension in SYCL
 In SYCL, when a kernel is submitted for execution, each instannce is a **work-item** and can be identified by a **global id** which is provided by the index space in SYCL called **ND-range**. A **ND-range** in SYCL defines the **global dimension**, N can 1, 2 or 3. Each kernel execute the same code but can use **global id** to specialize the computation. A typical example is to use **global id** to as array index to access only 1 item. 
