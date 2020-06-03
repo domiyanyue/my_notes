@@ -52,7 +52,27 @@ Now we understand the rational of global dimension and local dimension. Let's ho
 ## Examples
 Now let's check some code samples to see how global dimension and local dimension works.
 
-### Example 1. Simple Vector Add
+### Example 1. Simple Vector Add : Not specifying work group size
+This is typically used when multiple work-items are needed and no local synchronization arocess work group is required. 
+The kernel is enqueued with `cl::sycl::parallel_for function` parameterized by a `cl::sycl::range` argument specifying the dimension
+and size (in this example, 4 and 1). The work group size is decided by SYCL runtime. 
+
+``` C++
+...
+      queue.submit([&] (handler& cgh) {
+         auto a_acc = a_sycl.get_access<access::mode::read>(cgh);
+         auto b_acc = b_sycl.get_access<access::mode::read>(cgh);
+         auto c_acc = c_sycl.get_access<access::mode::discard_write>(cgh);
+
+         cgh.parallel_for<class VectorAdd>(range<1>(4), [=] (item<1> iter) {
+            c_acc[iter] = a_acc[iter] + b_acc[iter];
+         });
+      });
+...
+```
+
+
+
 
 ### Example 2. Reduce Sum
 
