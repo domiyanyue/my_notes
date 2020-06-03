@@ -1,11 +1,11 @@
 # Understanding SYCL Kernel Execution Model : Global Dimension and Local Dimension
 
-In order to construct your SYCL device code for fast execution, a clear understanding of how parallelism is specifed is critical. The 2  important concepts are **global dimension** and **local dimension**. Once you know the rational behind them, all related concepts should feel natural. 
+In order to construct your SYCL code to best exploit underlying hardware's capability, a clear understanding of how parallelism is specifed is critical. The 2 important concepts are **global dimension** and **local dimension**. All related concepts should feel natural once you understand them.  
 
-I will start this tutorial by explain **global dimension** and **local dimension** first followed by code examples in SYCL to demonstrate how they are applied in SYCL device code.
+This tutorial will explain **global dimension** and **local dimension** first followed by code examples in SYCL to demonstrate how they are applied in SYCL device code.
 
 ## Global Dimension
-A global dimension is a 1D, 2D or 3D parallelism defined for each kernel execution. It describes how the whole problem space is paritioned and dispathed to work-item. A work-item (thread) is execute in every point in the global dimension. 
+A global dimension is a 1D, 2D or 3D parallelism defined for each kernel execution. It describes how the whole problem space is paritioned and assigned to **work-items**. A **work-item (thread)** is execute in every point in the global dimension. 
 
 Let's look at some examples:  
 
@@ -35,17 +35,17 @@ Let's look at some examples:
   3. If your tasks is filter-like and each work-item deal with a 2 x 2 block. The global dimension is 960 (1920 / 2) x 540 (1080 / 2) and number of work-items is `518,400 = 480 x 270`.
 
 <p align="center"> 
-<img src="12d_example3.png?raw=true"/> <br>
+<img src="2d_example3.png?raw=true"/> <br>
 <em>Fig. 1: Example 2.3 2D Global Dimension 960 x 540</em>
 </p>
 
-At this point, hope the concept is clear to you. Global dimension refects how the problem input is divided in a 1D/2D/3D way, a work-item deal with each unit of of the whole problem space. How to partition the problem is not a easy job which requires a lot of consideration. We will not cover that in this tutorial. 
+It should be clear to you that global dimension refects how the problem space is divided and assigned to work-items. 
 
-Now we have dispatched the problem to each work-items and problem is solved, right? No yet. Turns out for more complicated problems, there is one important part we haven't consider, that is synchronization between work-items. In hardware design, the compute units which work-items works on can only be synchronized with compute units nearby with low cost. The reflect such hehaviour in software model, we need to introduce the concept of local dimension. 
+Now we have global dimension and dispatched the problem to each work-items. The execution model is well-defined, right? No yet. Turns out for more complicated problems, there is one thing we haven't consider. That is synchronization between work-items. We can't synchronize 2 work-items selected arbitrarily. The compute units execute threads have to be "physically close enough". This restriction is modeled in SYCL language using with the concept of **local dimension**.
 
 ## Local Dimension
 
-The local dimension breaks down global dimension into **local work-groups**. It is required in SYCL that local dimension size must be divisible by global dimension size in each dimension. For example if I have global dimensions of 32 x 100, I can't choose local  dimension of 18 (not divisible by 32) x 10 or 16 x 15 (not divisible by 100), but values like 16 x 50, 8 x 25 are legal. Each work-group is logically executed together on one **compute unit**. Synchronization is only allowed between work-items within the same work-group. Why? Because hardware is easy to built in this way. This limitation also ask the developers to carefully select work-group size. 
+In short, local dimension define the scope where work-items can be synchronized. The local dimension breaks down global dimension into **local work-groups**. It is required in SYCL that local dimension size must be divisible by global dimension size in each dimension. For example if I have global dimensions of 32 x 100, I can't choose local  dimension of 18 (not divisible by 32) x 10 or 16 x 15 (not divisible by 100), but values like 16 x 50, 8 x 25 are legal. Each work-group is logically executed together on one **compute unit**. Synchronization is only allowed between work-items within the same work-group. Why? Because hardware is easy to built in this way. This limitation also ask the developers to carefully select work-group size. 
 
 Now we understand the rational of global dimension and local dimension. Let's how they look like in SYCL.
 
