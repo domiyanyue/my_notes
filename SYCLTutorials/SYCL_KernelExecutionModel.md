@@ -7,7 +7,7 @@ I will start this tutorial by explain **global dimension** and **local dimension
 ## Global Dimension
 A global dimension is a 1D, 2D or 3D parallelism defined for each kernel execution. It describes how the whole problem space is paritioned and dispathed to work-item. A work-item (thread) is execute in every point in the global dimension. 
 
-Let's take a few example:  
+Let's look at some examples:  
 
 **Example 1.** Processing 1024 audio pieces, each work-item deal with 1 audio piece. In this case the global dimension is 1024 and number of work items is 1024.
 
@@ -17,12 +17,27 @@ Let's take a few example:
 </p>
 
 
-**Example 2.** Processing HD videos of size 1920 x 1080. Depends on the nature of problem and underlying hardware feature, you may come up with different ways to partition the problem. Let's consider 3 cases in which you will use different global dimensions. 
-  1. Say you want to process each pixel with one work-item, in this case, the global dimension is a 2-dimension value of 1920 x 1080, and total work-item number is `2M ~= 1920 x 1080`.  
+**Example 2.** Processing HD videos of size 1920 x 1080. Depends on the compute task to solve and underlying hardware feature, you may come up with different ways to partition the problem. Let's consider 3 cases in which you will choose different global dimensions. 
+  1. Process each pixel with one work-item. In this case, the global dimension is a 2-dimension value of 1920 x 1080, and total number of work-items is `2M ~= 1920 x 1080`. 
+
+<p align="center"> 
+<img src="2d_example1.png?raw=true"/> <br>
+<em>Fig. 1: Example 2.1 2D Global Dimension 1920 x 1080</em>
+</p>
   
-  2. If your compute task is performed per line, your compute task proces each line (1920 pixels) with one work-item. You only need 1080 work-items.
+  2. The compute task is performed per line, your program proces each line (1920 pixels) with one work-item. You only need 1080 work-items with global dimension (1D) of 1080.
+
+<p align="center"> 
+<img src="2d_example2.png?raw=true"/> <br>
+<em>Fig. 1: Example 2.2 1D Global Dimension 1080</em>
+</p>
   
   3. If your tasks is filter-like and each work-item deal with a 2 x 2 block. The global dimension is 960 (1920 / 2) x 540 (1080 / 2) and number of work-items is `518,400 = 480 x 270`.
+
+<p align="center"> 
+<img src="12d_example3.png?raw=true"/> <br>
+<em>Fig. 1: Example 2.3 2D Global Dimension 960 x 540</em>
+</p>
 
 At this point, hope the concept is clear to you. Global dimension refects how the problem input is divided in a 1D/2D/3D way, a work-item deal with each unit of of the whole problem space. How to partition the problem is not a easy job which requires a lot of consideration. We will not cover that in this tutorial. 
 
