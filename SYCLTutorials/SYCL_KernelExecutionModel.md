@@ -1,4 +1,6 @@
-# SYCL Kernel Execution Model : Global Dimension and Local Dimension
+# Understanding SYCL Kernel Execution Model : Global Dimension and Local Dimension
+
+In order to contruct your SYCL device code for fast execution, a clear understanding of SYCL kernel execution model is critical. The 2 most important concepts here are **global dimension** and **local dimension**. We will start this tutorial by explaining them. Once you know what they are and why they are nesssasary, all related SYCL concepts should be natural to you. 
 
 In this tutorial, we will talk about basic concepts first on device memory to let you understand the SYCL memory model design, including:
 
