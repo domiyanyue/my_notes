@@ -5,12 +5,12 @@ In order to construct your SYCL device code for fast execution, a clear understa
 I will start this tutorial by explain **global dimension** and **local dimension** first followed by code examples in SYCL to demonstrates how they are applied in SYCL device code.
 
 ## Global Dimension
-
-A global dimension is a 1D, 2D or 3D parallelism defined for each kernel execution, it defines how the whole problem space is paritioned and dispathed to work-item. A work-item (thread) is execute in every point in the global dimension. 
+A global dimension is a 1D, 2D or 3D parallelism defined for each kernel execution. It describes how the whole problem space is paritioned and dispathed to work-item. A work-item (thread) is execute in every point in the global dimension. 
 
 Let's take a few example:
+**Example 1.** Processing 1024 audio pieces, each work-item deal with 1 audio piece. In this case the global dimension is 1024 and number of work items is 1024.
 
-**Example 1.** Processing 1024 audio pieces, each work-item deal with 1 audio piece. In this case the global dimension is 1024 and number of work items is 1024. Each t
+
 
 **Example 2.** Processing HD videos of size 1920 x 1080. Depends on the nature of problem and underlying hardware feature, you may come up with different ways to partition the problem. Let's consider 3 cases in which you will use different global dimensions. 
   1. Say you want to process each pixel with one work-item, in this case, the global dimension is a 2-dimension value of 1920 x 1080, and total work-item number is `2M ~= 1920 x 1080`.  
