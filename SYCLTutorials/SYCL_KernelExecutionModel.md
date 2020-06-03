@@ -49,6 +49,15 @@ It is required in SYCL that local dimension size must be divisible by global dim
 
 Now we understand the rational of global dimension and local dimension. Let's how they look like in SYCL.
 
+## Examples
+Now let's check some code samples to see how global dimension and local dimension works.
+
+### Example 1. Simple Vector Add
+
+### Example 2. Reduce Sum
+
+
+
 
 ## Global Dimension in SYCL
 In SYCL, when a kernel is submitted for execution, each instannce is a **work-item** and can be identified by a **global id** which is provided by the index space in SYCL called **ND-range**. A **ND-range** in SYCL defines the **global dimension**, N can 1, 2 or 3. Each kernel execute the same code but can use **global id** to specialize the computation. A typical example is to use **global id** to as array index to access only 1 item. 
