@@ -22,24 +22,24 @@ Let's look at some examples:
 
 <p align="center"> 
 <img src="2d_example1.png?raw=true"/> <br>
-<em>Fig. 1: Example 2.1 2D Global Dimension 1920 x 1080</em>
+<em>Fig. 2: Example 2.1 2D Global Dimension 1920 x 1080</em>
 </p>
   
   2. The compute task is performed per line, your program proces each line (1920 pixels) with one work-item. You only need 1080 work-items with global dimension (1D) of 1080.
 
 <p align="center"> 
 <img src="2d_example2.png?raw=true"/> <br>
-<em>Fig. 1: Example 2.2 1D Global Dimension 1080</em>
+<em>Fig. 3: Example 2.2 1D Global Dimension 1080</em>
 </p>
   
   3. If your tasks is filter-like and each work-item deal with a 2 x 2 block. The global dimension is 960 (1920 / 2) x 540 (1080 / 2) and number of work-items is `518,400 = 480 x 270`.
 
 <p align="center"> 
 <img src="2d_example3.png?raw=true"/> <br>
-<em>Fig. 1: Example 2.3 2D Global Dimension 960 x 540</em>
+<em>Fig. 4: Example 2.3 2D Global Dimension 960 x 540</em>
 </p>
 
-It should be clear to you at this point, that the choice of **global dimension** dictates how the problem space is divided and dispatched to work-items. The parallelism model is now well-defined, right? Well, not yet. Turns out we haven't considered one essential piece - *synchornization between work-items*. In most multi-core hardwares like GPUs which SYCL runs on top of, 2 arbitrary work-items can't be synchronized easily. Only work-items executes on the same **compute unit** can be synchronized. The hardware restriction lead to the concept of **local dimension**. 
+It should be clear to you at this point, that the choice of **global dimension** dictates how the problem space is divided and dispatched to work-items. The parallelism model is now well-defined, right? Well, not yet. Turns out we haven't considered one essential piece - *synchornization between work-items*. In most hardwares like multi-core CPU or GPUs which SYCL runs on top of, 2 arbitrary work-items can't be synchronized easily. Only work-items executes on the same **compute unit** can be synchronized. This hardware restriction make us have to be careful on selecting **local dimension**. 
 
 ## Local Dimension
 
