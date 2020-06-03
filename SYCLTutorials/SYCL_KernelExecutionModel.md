@@ -22,7 +22,7 @@ Let's take a few example:
   
   2. If your compute task is performed per line, your compute task proces each line (1920 pixels) with one work-item. You only need 1080 work-items.
   
-  3. If your tasks is filter-like and each work-item deal with a 4 x 4 block. The global dimension is 480 (1920 / 4) x 270 (1080 / 4) and number of work-items is `129,600 = 480 x 270`.
+  3. If your tasks is filter-like and each work-item deal with a 2 x 2 block. The global dimension is 960 (1920 / 2) x 540 (1080 / 2) and number of work-items is `518,400 = 480 x 270`.
 
 At this point, hope the concept is clear to you. Global dimension refects how the problem input is divided in a 1D/2D/3D way, a work-item deal with each unit of of the whole problem space. How to partition the problem is not a easy job which requires a lot of consideration. We will not cover that in this tutorial. 
 
