@@ -64,7 +64,7 @@ int main() {
 
 ```
 This program cover's everything from host to device. Let's break it down to the essential build blocks of a SYCL application:
-* **Header Files Inclusion**: 
+* **Header Files Inclusion**
 ```C++
 #include <CL/sycl.hpp>
 
@@ -73,21 +73,20 @@ using namespace cl::sycl;
 SYCL applications must include `CL/sycl.hpp` which contains APIs for SYCL runtime types like queue,
 buffer, device, etc. They all live under `cl::sycl` namespace. For the simplicity of this example, we put `using namespace` command at the beginning of the file.
 
-* **Select Device**:
+* **Select Device**
 ```C++
 default_selector device_selector;
 ```
-This is the place where you want specfy which device (CPU, GPU, FPGA, etc) SYCL kernel execute on. SYCL provde a `default_selector` that will select a existing device in the system. SYCL also use `cpu_selector` or `gpu_selector`.
+This is the place where you want specfy which device (CPU, GPU, FPGA, etc) SYCL kernel execute on. SYCL provde a `default_selector` that will select a existing device in the system. SYCL also provide `cpu_selector`, `gpu_selector` and allow you to customize your selector. In this example, we will use whatever system gives us.
 
-* **Setup Buffers between host and device**:
+* **Setup Buffers between host and device**
 ```C++
       buffer<float, 1> a_sycl(vec_a.data(), ArraySize);
       buffer<float, 1> b_sycl(vec_b.data(), ArraySize);
       buffer<float, 1> c_sycl(vec_c.data(), ArraySize);
 ```
-In SYCL a buffer is used to maintain an area of memory that can be shared between the host and one or more devices. Here we instantiate a **buffer type** with two *template arguments*: data type `float` and 
-data dimension `1`. Then we construct a **buffer instance** which takes two arguments: the first is the data and the second is an the number of elements. 
-In this tutorial a buffer object of element type of `float` and dimension 1 with size `ArraySize` is created. 
+In SYCL a buffer is used to maintain an area of memory that can be shared between the host and one or more devices. Here we instantiate a **buffer type** with two *template arguments*: data type `float` and data dimension `1`. We also construct a **buffer instance** with two arguments: the first is the data source and the second one is an the number of elements. SYCL provide a lot of interfaces for constructing buffers from varias of data source like `std::vector` and `C arrays`.
+In this example, we create a buffer object of element type of `float` and dimension 1 with size `ArraySize` and initiliza it with data in `vec_a`.  
 
 * **Command Group**
 
