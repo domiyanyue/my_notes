@@ -3,7 +3,8 @@
 SYCL is a single source heteogeous programming model built on top of OpenCL that allows programmers write heterogenous application completely using C++. If you are familiar with OpenCL, the concepts in this tutorial should be familiar to you and you can mostly focusing on what's new in SYCL. If you are not, don't worry, this won't require any background knowledge in OpenCL. 
 
 ## A brief history and background 
-Heterogenous Computing refer to systems that uses more than one kind of processors (CPU + GPU, CPU + FPGA, CPU + DSP). 
+Heterogenous computing refer to systems that uses more than one kind of processors (CPU + GPU, CPU + FPGA, CPU + DSP). To make programming for heterogeous system easy, people have come up with different programming languages including OpenCL, CUDA, OpenACC, etc. 
+OpenCL is one of the mostly used one and it's still used today. 
 
 
 
