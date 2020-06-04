@@ -89,6 +89,21 @@ In SYCL a buffer is used to maintain an area of memory that can be shared betwee
 In this example, we create a buffer object of element type of `float` and dimension 1 with size `ArraySize` and initiliza it with data in `vec_a`.  
 
 * **Command Group**
+A command group is a single unit of work that will be submited and executed on the device. 
+```C++
+      queue.submit([&] (handler& cgh) { // start of command group
+         auto a_acc = a_sycl.get_access<access::mode::read>(cgh);
+         auto b_acc = b_sycl.get_access<access::mode::read>(cgh);
+         auto c_acc = c_sycl.get_access<access::mode::discard_write>(cgh);
+
+         cgh.parallel_for<class VectorAdd>(range<1>(ArraySize), [=] (item<1> item) {
+            c_acc[item] = a_acc[item] + b_acc[item];
+         }); // end of command group
+      });
+```
+A command group consists of a kernel function (defined by a kernel function enqueue API `parallel_for`) and 
+inputs and outputs defined by accessor object initilized by `get_access` API. 
+
 
 * **Construct Command Queue and Submit Command Group**:
 ```C++
