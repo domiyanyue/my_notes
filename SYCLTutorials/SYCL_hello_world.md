@@ -2,7 +2,7 @@
 
 Welcome to my SYCL tutorial! SYCL is a single source heteogeous programming model built on top of OpenCL that allow programmers to write heterogenous application completely using C++. If you are familiar with OpenCL, the concepts in this tutorial should be familiar to you and you can focus on what's new in SYCL. If you are not, don't worry, this won't require any background knowledge in OpenCL. 
 
-## A brief history and background 
+## A Brief Background 
 Heterogenous computing refer to systems that uses more than one kind of processors (CPU + GPU, CPU + FPGA, CPU + DSP). To make programming for heterogeous system easy, people have come up with different programming models including OpenCL, CUDA, OpenACC, etc. 
 OpenCL is one of the widely adopted one. It has a well-defined execution model that is portable across all type of devices. 
 However, OpenCL also received a lot of complains:
@@ -16,8 +16,9 @@ SYCL was born reactive to OpenCL's pros and cons and aimed to a better heterogen
 3. SYCL is a single source (no serparation of device and host) programming model that allow developers to express at a high level of abstraction.            
 
 ## What does SYCL looks like : Example Simple Vector Add
-To better understand this part, reads are supposed to know C++ functor and lambda express which is described here.
-Here is a simple vector add example written in SYCL:
+I will lead you through a simple SYCL code sample. Hopefully this gives you an idea of the structure of a SYCL application.
+Please don't pay too much attention to details, I will mention them but just for the purpose of understanding the basics.
+Notice, it is important that you know know C++ functor and lambda express which is described here. 
 
 ```C++
 #include <iostream>
@@ -47,7 +48,7 @@ int main() {
       queue.submit([&] (handler& cgh) {
          auto a_acc = a_sycl.get_access<access::mode::read>(cgh);
          auto b_acc = b_sycl.get_access<access::mode::read>(cgh);
-         auto c_acc = c_sycl.get_access<access::mode::discard_write>(cgh);
+         auto c_acc = c_sycl.get_access<access::mode::write>(cgh);
 
          cgh.parallel_for<class VectorAdd>(range<1>(ArraySize), [=] (item<1> item) {
             c_acc[item] = a_acc[item] + b_acc[item];
@@ -63,21 +64,20 @@ int main() {
 }
 
 ```
-This program cover's everything from host to device. Let's break it down to the essential build blocks of a SYCL application:
+Let's break it down to the basic build blocks of a SYCL application:
 * **Header Files Inclusion**
 ```C++
 #include <CL/sycl.hpp>
 
 using namespace cl::sycl;
 ```
-SYCL applications must include `CL/sycl.hpp` which contains APIs for SYCL runtime types like queue,
-buffer, device, etc. They all live under `cl::sycl` namespace. For the simplicity of this example, we put `using namespace` command at the beginning of the file.
+SYCL applications must include `CL/sycl.hpp` which contains APIs for SYCL runtime types like queue, buffer, device, etc. They all live under `cl::sycl` namespace. For the simplicity of this example, we put `using namespace` command at the beginning of the file.
 
 * **Select Device**
 ```C++
 default_selector device_selector;
 ```
-This is the place where you want specfy which device (CPU, GPU, FPGA, etc) SYCL kernel execute on. SYCL provde a `default_selector` that will select a existing device in the system. SYCL also provide `cpu_selector`, `gpu_selector` and allow you to customize your selector. In this example, we will use whatever system gives us.
+This is how you specfy device (CPU, GPU, FPGA, etc) to execute on. SYCL provde a `default_selector` that will select a existing device in the system. SYCL also provide `cpu_selector`, `gpu_selector` and allow you to customize your selector. In this example, we will `default_selector` which use the device runtime pick for us.
 
 * **Setup Buffers between host and device**
 ```C++
@@ -85,38 +85,47 @@ This is the place where you want specfy which device (CPU, GPU, FPGA, etc) SYCL 
       buffer<float, 1> b_sycl(vec_b.data(), ArraySize);
       buffer<float, 1> c_sycl(vec_c.data(), ArraySize);
 ```
-In SYCL a buffer is used to maintain an area of memory that can be shared between the host and one or more devices. Here we instantiate a **buffer type** with two *template arguments*: data type `float` and data dimension `1`. We also construct a **buffer instance** with two arguments: the first is the data source and the second one is an the number of elements. SYCL provide a lot of interfaces for constructing buffers from varias of data source like `std::vector` and `C arrays`.
-In this example, we create a buffer object of element type of `float` and dimension 1 with size `ArraySize` and initiliza it with data in `vec_a`.  
+In SYCL, a buffer is used to maintain an area of memory that can be shared between the host and one or more devices. Here we instantiate a **buffer type** with two *template arguments*: data type `float` and data dimension `1`. We also construct a **buffer instance** with two arguments: the first is the data source and the second one is an the number of elements. SYCL provide interfaces for constructing buffers from different types of data sources like `std::vector` or `C arrays`.  
+In tthe first line of this example, we create a 1 dimensional buffer object of containing element `float` of size `ArraySize` and initiliza it with data in `vec_a`. 
 
 * **Command Group**
-A command group is a single unit of work that will be submited and executed on the device. 
+A command group is a single unit of work that will be executed on device. You can see the command group
+is passed as a functor (function object) parameter to to `submit` function. It also accepts a parameter `handler` constructed by SYCL runtime which gives user ability to access command group scope APIs. 
 ```C++
       queue.submit([&] (handler& cgh) { // start of command group
-         auto a_acc = a_sycl.get_access<access::mode::read>(cgh);
+         // inputs and outputs accessor
+	 auto a_acc = a_sycl.get_access<access::mode::read>(cgh);
          auto b_acc = b_sycl.get_access<access::mode::read>(cgh);
-         auto c_acc = c_sycl.get_access<access::mode::discard_write>(cgh);
-
+         auto c_acc = c_sycl.get_access<access::mode::write>(cgh);
+	 
+	 // kernel function enqueue API `parallel_for`
          cgh.parallel_for<class VectorAdd>(range<1>(ArraySize), [=] (item<1> item) {
             c_acc[item] = a_acc[item] + b_acc[item];
          }); // end of command group
       });
 ```
-A command group consists of a kernel function (defined by a kernel function enqueue API `parallel_for`) and 
-inputs and outputs defined by accessor object initilized by `get_access` API. 
-
+In this example and most cases, the command group consists of a kernel function (defined by a kernel function enqueue API `parallel_for` which we will introduce later) and inputs and outputs defined by **accessor** object initilized by `get_access` API. 
 
 * **Construct Command Queue and Submit Command Group**
 ```C++
+...
+	queue queue(device_selector);
+	queue.submit([&] (handler& cgh) {
+	...
+	}
 ```
-Command queue in SYCL submit a command group
+A SYCL **queue** connects **command groups** with certain device. In this example, We first construct a
+queue specifying all **command groups** submited by this queue will run on `device_selector` (argument). Then we submit a command group to the device asynchronously. The submit command will return immediately and the execution of command group will start later.
 
 * **Specify Accessors**
 ```C++
          auto a_acc = a_sycl.get_access<access::mode::read>(cgh);
          auto b_acc = b_sycl.get_access<access::mode::read>(cgh);
-         auto c_acc = c_sycl.get_access<access::mode::discard_write>(cgh);
+         auto c_acc = c_sycl.get_access<access::mode::write>(cgh);
 ```
-
+Above commands create **accessors** which read from/write to memory. In this case, it gives us access to formerly created **buffer** objects. **accessor** is the only way to access buffer in SYCL. When creating an accessor, we have to provide:
+1. `access mode` (read, write, read_write, etc.) as template parameter to specify the baivour of accessor. Compiler can optimizate the code if it knows the accessor's limitation -- i.e., read only or write only.
+2. We also need to pass in a command group handler 
 
 * **Kernel Function**:
 ```C++
@@ -124,7 +133,7 @@ Command queue in SYCL submit a command group
             c_acc[item] = a_acc[item] + b_acc[item];
          });
 ```
-
+Kernel code is defined as a lambda expression, `parallel_for` here is a API defining the execution model of the kernel, `class VectorAdd` is a templated parameter by design to give the kernel a name. You can see we don't have a defin
 
 SYCL is a royalty-free, cross-platform abstraction layer built on top of OpenCL. SYCL language spec is based on mordern C++ (C++11 and beyond). This enables codes to be written in a single-source style completely in standard C++. 
 
