@@ -1,27 +1,24 @@
 # Introduction to SYCL
 
-SYCL is a single source heteogeous programming model built on top of OpenCL that allows programmers write heterogenous application completely using C++. If you are familiar with OpenCL, the concepts in this tutorial should be familiar to you and you can mostly focusing on what's new in SYCL. If you are not, don't worry, this won't require any background knowledge in OpenCL. 
+Welcome to my SYCL tutorial! SYCL is a single source heteogeous programming model built on top of OpenCL that allow programmers to write heterogenous application completely using C++. If you are familiar with OpenCL, the concepts in this tutorial should be familiar to you and you can focus on what's new in SYCL. If you are not, don't worry, this won't require any background knowledge in OpenCL. 
 
 ## A brief history and background 
-Heterogenous computing refer to systems that uses more than one kind of processors (CPU + GPU, CPU + FPGA, CPU + DSP). To make programming for heterogeous system easy, people have come up with different programming languages including OpenCL, CUDA, OpenACC, etc. 
-OpenCL is one of the mostly used one and it's still used today. 
+Heterogenous computing refer to systems that uses more than one kind of processors (CPU + GPU, CPU + FPGA, CPU + DSP). To make programming for heterogeous system easy, people have come up with different programming models including OpenCL, CUDA, OpenACC, etc. 
+OpenCL is one of the widely adopted one. It has a well-defined execution model that is portable across all type of devices. 
+However, OpenCL als got a lot of complains:
+1. Limited support for C++. Developers do not benefit from new features in modern in C++.  
+2. The weak link between host and device code is error-prone. Developers have to write in 2 different languages and compile host and device part using different compilers. Oftenly, users have to write their stringgify script to automate the development process.
+3. OpenCL is too verbose for many developers who don't want to explictily write every low-level operation like memory transaction between host and device.
 
+SYCL was born reactive to OpenCL's pros and cons and aimed to a better heterogenous framework.
+1. It inheritant the good execution model of OpenCL.
+2. SYCL is purely based on C++. 
+3. SYCL is a single source (no serparation of device and host) programming model that allow developers to express at a high level of abstraction.            
 
+## What does SYCL looks like : Example Simple Vector Add
+To better understand this part, reads are supposed to know C++ functor and lambda express which is described here.
+Here is a simple vector add example written in SYCL:
 
-SYCL is a royalty-free, cross-platform abstraction layer built on top of OpenCL. SYCL language spec is based on mordern C++ (C++11 and beyond). This enables codes to be written in a single-source style completely in standard C++. 
-
-Compared to OpenCL, SYCL provides serveral advantages:
-* **C++ language**: Developers can leverage C++ features like template to make the code more expressible
-and elegant. Also SYCL built-in APIs for queue, buffers are RAII types, which means developers has less book keeping job to control the life cycle of them.
-
-* **Single Source**: SYCL host and device code can exists in the same file. It's compilers' job to extract device code from the file and hand it off to the selected device backend compiler. You don't have to run 2 compiles seperately on host and device anymore. This allows the project to be better orgnaized and deployed.
-
-* **Implicit Data Movement Support**: Unlike OpenCL where a lot of boileplate code are needed for data
-transfer between host and device, SYCL provide class "SYCL buffer" and runtime support to help automatically deduce memory movement. We will see it in the example.
-
-In this article, we will look at a simple example that performs element wise sum.
-
-## Example: VectorAdd
 ```C++
 #include <iostream>
 #include <vector>
@@ -113,6 +110,21 @@ Command queue in SYCL submit a command group
             c_acc[item] = a_acc[item] + b_acc[item];
          });
 ```
+
+
+SYCL is a royalty-free, cross-platform abstraction layer built on top of OpenCL. SYCL language spec is based on mordern C++ (C++11 and beyond). This enables codes to be written in a single-source style completely in standard C++. 
+
+Compared to OpenCL, SYCL provides serveral advantages:
+* **C++ language**: Developers can leverage C++ features like template to make the code more expressible
+and elegant. Also SYCL built-in APIs for queue, buffers are RAII types, which means developers has less book keeping job to control the life cycle of them.
+
+* **Single Source**: SYCL host and device code can exists in the same file. It's compilers' job to extract device code from the file and hand it off to the selected device backend compiler. You don't have to run 2 compiles seperately on host and device anymore. This allows the project to be better orgnaized and deployed.
+
+* **Implicit Data Movement Support**: Unlike OpenCL where a lot of boileplate code are needed for data
+transfer between host and device, SYCL provide class "SYCL buffer" and runtime support to help automatically deduce memory movement. We will see it in the example.
+
+In this article, we will look at a simple example that performs element wise sum.
+
 
 ## Summary
 In this article, we demonstrate the basics of SYCL by going through a simple example. It covers
