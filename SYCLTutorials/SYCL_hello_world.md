@@ -5,7 +5,7 @@ Welcome to my SYCL tutorial! SYCL is a single source heteogeous programming mode
 ## A brief history and background 
 Heterogenous computing refer to systems that uses more than one kind of processors (CPU + GPU, CPU + FPGA, CPU + DSP). To make programming for heterogeous system easy, people have come up with different programming models including OpenCL, CUDA, OpenACC, etc. 
 OpenCL is one of the widely adopted one. It has a well-defined execution model that is portable across all type of devices. 
-However, OpenCL als got a lot of complains:
+However, OpenCL also received a lot of complains:
 1. Limited support for C++. Developers do not benefit from new features in modern in C++.  
 2. The weak link between host and device code is error-prone. Developers have to write in 2 different languages and compile host and device part using different compilers. Oftenly, users have to write their stringgify script to automate the development process.
 3. OpenCL is too verbose for many developers who don't want to explictily write every low-level operation like memory transaction between host and device.
@@ -63,7 +63,7 @@ int main() {
 }
 
 ```
-Let's take a quick look at essential building blocks for a SYCL program:
+This program cover's everything from host to device. Let's break it down to the essential build blocks of a SYCL application:
 * **Header Files Inclusion**: 
 ```C++
 #include <CL/sycl.hpp>
