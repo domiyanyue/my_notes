@@ -77,6 +77,12 @@ and size (in this example, 4 and 1). The work group size is decided by SYCL runt
 ### Example 2. Reduce Sum
 In this example, ND range will be introduced
 
+<p align="center"> 
+<img src="reduce_sum.png?raw=true"/> <br>
+<em>Fig. 4: Example 2.3 2D Global Dimension 960 x 540</em>
+</p>
+
+
 ### Example 3. 2 Dimensional Buffer
 
 
