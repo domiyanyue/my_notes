@@ -75,6 +75,9 @@ and size (in this example, 4 and 1). The work group size is decided by SYCL runt
 
 
 ### Example 2. Reduce Sum
+In this example, ND range will be introduced
+
+### Example 3. 2 Dimensional Buffer
 
 
 
