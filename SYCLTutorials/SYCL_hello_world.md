@@ -1,4 +1,11 @@
-# SYCL Hello World
+# Introduction to SYCL
+
+SYCL is a single source heteogeous programming model built on top of OpenCL that allows programmers write heterogenous application completely using C++. If you are familiar with OpenCL, the concepts in this tutorial should be familiar to you and you can mostly focusing on what's new in SYCL. If you are not, don't worry, this won't require any background knowledge in OpenCL. 
+
+## A brief history and background 
+Heterogenous Computing refer to systems that uses more than one kind of processors (CPU + GPU, CPU + FPGA, CPU + DSP). 
+
+
 
 SYCL is a royalty-free, cross-platform abstraction layer built on top of OpenCL. SYCL language spec is based on mordern C++ (C++11 and beyond). This enables codes to be written in a single-source style completely in standard C++. 
 
