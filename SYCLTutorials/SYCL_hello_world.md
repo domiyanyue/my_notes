@@ -105,12 +105,12 @@ A command group consists of a kernel function (defined by a kernel function enqu
 inputs and outputs defined by accessor object initilized by `get_access` API. 
 
 
-* **Construct Command Queue and Submit Command Group**:
+* **Construct Command Queue and Submit Command Group**
 ```C++
 ```
 Command queue in SYCL submit a command group
 
-* **Specify Accessors**:
+* **Specify Accessors**
 ```C++
          auto a_acc = a_sycl.get_access<access::mode::read>(cgh);
          auto b_acc = b_sycl.get_access<access::mode::read>(cgh);
