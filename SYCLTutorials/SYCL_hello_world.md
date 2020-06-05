@@ -16,8 +16,8 @@ SYCL was born reactive to OpenCL's pros and cons and aimed at a better heterogen
 3. SYCL is a single source (no separation of device and host) programming model that allows developers to express at a high level of abstraction.            
 
 ## What does SYCL looks like Example Simple Vector Add
-I will lead you through a simple SYCL code sample. Hopefully, this gives you an idea of the structure of an SYCL application.
-Please don't pay too much attention to details, I will mention them but just for the purpose of understanding the basics.
+I will lead you through a simple SYCL code sample. Hopefully, this gives you an idea of the structure of a SYCL application.
+Please don't pay too much attention to details, I will mention them but just to understand the basics.
 Notice, it is important that you know C++ functor and lambda express which is described here. 
 
 ```C++
@@ -64,7 +64,7 @@ int main() {
 }
 
 ```
-Let's break it down to the basic build blocks of an SYCL application:
+Let's break it down to the basic build blocks of a SYCL application:
 * **Header Files Inclusion**
 ```C++
 #include <CL/sycl.hpp>
@@ -77,7 +77,7 @@ SYCL applications must include `CL/sycl.hpp` which contains APIs for SYCL runtim
 ```C++
 default_selector device_selector;
 ```
-This is how you specfy device (CPU, GPU, FPGA, etc) to execute on. SYCL provde a `default_selector` that will select a existing device in the system. SYCL also provide `cpu_selector`, `gpu_selector` and allow you to customize your selector. In this example, we will `default_selector` which use the device runtime pick for us.
+This is how you specify the device (CPU, GPU, FPGA, etc) to execute on. SYCL provides a `default_selector` that will select an existing device in the system. SYCL also provides `cpu_selector`, `gpu_selector`, and allow you to customize your selector. In this example, we will `default_selector` which uses the device runtime pick for us.
 
 * **Setup Buffers between host and device**
 ```C++
@@ -87,14 +87,14 @@ This is how you specfy device (CPU, GPU, FPGA, etc) to execute on. SYCL provde a
       buffer<float, 1> c_sycl(vec_c.data(), ArraySize);
 }
 ```
-In SYCL, a buffer is used to maintain an area of memory that can be shared between the host and one or more devices. Here we instantiate a **buffer type** with two *template arguments*: data type `float` and data dimension `1`. We also construct a **buffer instance** with two arguments: the first is the data source and the second one is an the number of elements. SYCL provide interfaces for constructing buffers from different types of data sources like `std::vector` or `C arrays`.  
-In the first line of this example, we create a 1 dimensional buffer object of containing element `float` of size `ArraySize` and initiliza it with data in `vec_a`. 
+In SYCL, a buffer is used to maintain an area of memory that can be shared between the host and one or more devices. Here we instantiate a **buffer type** with two *template arguments*: data type `float` and data dimension `1`. We also construct a **buffer instance** with two arguments: the first is the data source and the second one is the number of elements. SYCL provides interfaces for constructing buffers from different types of data sources like `std::vector` or `C arrays`.  
+In the first line of this example, we create a 1-dimensional buffer object of containing element `float` of size `ArraySize` and initialized it with data in `vec_a`. 
 
-Notice in the code there is a scope `{}` around buffers. This scope define the life-span of buffer. When the buffer is constructed inside the scope, it automatically get the ownership of the data. When the buffer goes out of scope, it copies data back to `vec_a`, `vec_b` and `vec_c`. The memory movement between host and device is handled implicitly in buffer's constructor and descructor. 
+Notice in the code there is a scope `{}` around buffers. This scope defines the life-span of buffer. When the buffer is constructed inside the scope, it automatically gets the ownership of the data. When the buffer goes out of scope, it copies data back to `vec_a`, `vec_b` and `vec_c`. The memory movement between host and device is handled implicitly in the buffer's constructor and destructor. 
 
 * **Command Group**
-A command group is a single unit of work that will be executed on device. You can see the command group
-is passed as a functor (function object) parameter to to `submit` function. It also accepts a parameter `handler` constructed by SYCL runtime which gives user ability to access command group scope APIs. 
+A command group is a single unit of work that will be executed on the device. You can see the command group
+is passed as a functor (function object) parameter to to `submit` function. It also accepts a parameter `handler` constructed by SYCL runtime which gives users the ability to access command group scope APIs. 
 ```C++
       queue.submit([&] (handler& cgh) { // start of command group
          // inputs and outputs accessor
@@ -108,7 +108,7 @@ is passed as a functor (function object) parameter to to `submit` function. It a
          }); // end of command group
       });
 ```
-In this example and most cases, the command group consists of a kernel function (defined by a kernel function enqueue API `parallel_for` which we will introduce later) and inputs and outputs defined by **accessor** object initilized by `get_access` API. 
+In this example and most cases, the command group consists of a kernel function (defined by a kernel function enqueue API `parallel_for` which we will introduce later) and inputs and outputs defined by **accessor** object initialized by `get_access` API. 
 
 * **Construct Command Queue and Submit Command Group**
 ```C++
@@ -118,9 +118,9 @@ In this example and most cases, the command group consists of a kernel function 
     ...
     }
 ```
-A SYCL **queue** connects **command groups** with certain device. In this example, We first construct a
-queue specifying all **command groups** submited by this queue will run on `device_selector` (argument). Then we submit a
-command group to the device asynchronously. The submit command will return immediately and the execution of command group will start later.
+A SYCL **queue** connects **command groups** with a certain device. In this example, We first construct a
+queue specifying all **command groups** submitted by this queue will run on `device_selector` (argument). Then we submit a
+command group to the device asynchronously. The submit command will return immediately and the execution of the command group will start later.
 
 * **Specify Accessors**
 
@@ -133,35 +133,35 @@ command group to the device asynchronously. The submit command will return immed
 ```
 `<buffer>.get_access` returns accessor and gives it access to formerly created **buffer** `(a_sycl, b_sycl, c_sycl)` objects. For every accessor, there are three basic attributes:
 1. **buffer**: memory it access which is determined when created. 
-2. **access mode**: passed as template parameter. Typical values are read, write, read_write. This gives hints to the compiler to optimize the implimentation. 
+2. **access mode**: passed as template parameter. Typical values are read, write, read_write. This gives hints to the compiler to optimize the implementation. 
 3. **command group handler**: the argument `cgh` indicates that the accessor will be available in kernel within this command group scope.
 
 * **Kernel Function**:
-Kernel function is defined with 2 element: data parallel model and kernel function body. 
+A kernel function is defined with 2 elements: data parallel model and kernel function body. 
 ```C++
          cgh.parallel_for<class VectorAdd>(range<1>(ArraySize), [=] (item<1> item) {
             c_acc[item] = a_acc[item] + b_acc[item];
          });
 ```
-In this example, data parallel model are defined by `parallel_for` API and `range` argument. Combined, they indicaites the kernel will follow basic data parallel model execute as multiple **work-items (thread)**. Other data parallel models are work-group data parallel, single task and hierarchical data parallel.  
+In this example, data parallel model is defined by `parallel_for` API and `range` argument. Combined, they indicates the kernel will follow basic data parallel model execute as multiple **work-items (thread)**. Other data parallel models are work-group data parallel, single task, and hierarchical data parallel.  
 
-Kernel function body is encapsulated as a function object, it accepts an `item` as argument instructed by basic data parallel model. In side the kernel function body, we add value from buffer `a_sycl` and `b_sycl` and save the result in `c_sycl` through accessors. `item` is **work-item id** (think of it as thread id) which tells the kernel that each execution of instance only add the value at thread_id position. Together, all threads will run in parallel to finish the work.
+The kernel function body is encapsulated as a function object, it accepts an `item` as argument instructed by basic data parallel model. Inside the kernel function body, we add value from buffer `a_sycl` and `b_sycl` and save the result in `c_sycl` through accessors. `item` is **work-item id** (think of it as thread id) which tells the kernel that each execution of instance only add the value at thread_id position. Together, all threads will run in parallel to finish the work.
 
 `class VectorAdd` which used as a templated parameter is just to give the kernel a name. 
 
 
 ## Summary
-SYCL is a huge leap forward compared to OpenCL. It provides serveral advantages:
+SYCL is a huge leap forward compared to OpenCL. It provides several advantages:
 * **C++ language**: Developers can leverage C++ features like template to make the code more expressible
-and elegant. Also SYCL built-in APIs for queue, buffers are RAII types, which means developers has less book keeping job to control the life cycle of them.
+and elegant. Also SYCL built-in APIs for queue, buffers are RAII types, which means developers has less bookkeeping job to control the life cycle of them.
 
-* **Single Source**: SYCL host and device code can exists in the same file. It's compilers' job to extract device code from the file and hand it off to the selected device backend compiler. You don't have to run 2 compiles seperately on host and device anymore. This allows the project to be better orgnaized and deployed.
+* **Single Source**: SYCL host and device code can exist in the same file. It's compilers' job to extract device code from the file and hand it off to the selected device backend compiler. You don't have to run 2 compiles separately on host and device anymore. This allows the project to be better organized and deployed.
 
-* **Implicit Data Movement Support**: Unlike OpenCL where a lot of boileplate code are needed for data
-transfer between host and device, SYCL provide class "SYCL buffer" and runtime support to help automatically deduce memory movement. We will see it in the example.
+* **Implicit Data Movement Support**: Unlike OpenCL where a lot of boilerplate code is needed for data
+transfer between host and device, SYCL provides class "SYCL buffer" and runtime support to help automatically deduce memory movement. We will see it in the example.
 
-We went through a "vector add" SYCL application which include all the basic elements:
-* Declare a SYCL queue object associated with certain device.
-* Use buffers to implicitly tranfer owner ship of memory between host and device.
-* Write a command group that includes kernel function and accessros. Submit it to device.
-The terms may be overwhelming at this point especially if you are new to heterogenous computing. They will be covered in following tutprials.
+We went through a "vector add" SYCL application which includes all the basic elements:
+* Declare a SYCL queue object associated with certain devices.
+* Use buffers to implicitly transfer ownership of memory between host and device.
+* Write a command group that includes kernel function and accessors. Submit it to the device.
+The terms may be overwhelming at this point especially if you are new to heterogeneous computing. They will be covered in the following tutorials.
