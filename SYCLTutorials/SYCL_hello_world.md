@@ -116,7 +116,7 @@ In this case, the command group consists of a kernel function (defined by a kern
     ...
     }
 ```
-A SYCL **queue** connects (submit and trigger execution) **command groups** to a certain device. In this example, We first construct a
+A SYCL **queue** submits and triggers execution of **command group(s)** on a certain device. In this example, We first construct a
 queue specifying the device it will submit to. Then we submit a command group to the device asynchronously. The submit command will return immediately and the execution of the command group will start later.
 
 ### Specify Accessors
