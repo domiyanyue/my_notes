@@ -81,12 +81,16 @@ This is how you specfy device (CPU, GPU, FPGA, etc) to execute on. SYCL provde a
 
 * **Setup Buffers between host and device**
 ```C++
+{
       buffer<float, 1> a_sycl(vec_a.data(), ArraySize);
       buffer<float, 1> b_sycl(vec_b.data(), ArraySize);
       buffer<float, 1> c_sycl(vec_c.data(), ArraySize);
+}
 ```
 In SYCL, a buffer is used to maintain an area of memory that can be shared between the host and one or more devices. Here we instantiate a **buffer type** with two *template arguments*: data type `float` and data dimension `1`. We also construct a **buffer instance** with two arguments: the first is the data source and the second one is an the number of elements. SYCL provide interfaces for constructing buffers from different types of data sources like `std::vector` or `C arrays`.  
-In tthe first line of this example, we create a 1 dimensional buffer object of containing element `float` of size `ArraySize` and initiliza it with data in `vec_a`. 
+In the first line of this example, we create a 1 dimensional buffer object of containing element `float` of size `ArraySize` and initiliza it with data in `vec_a`. 
+
+Notice in the code there is a scope `{}` around buffers. This scope define the life-span of buffer. When the buffer is constructed inside the scope, it automatically get the ownership of the data. When the buffer goes out of scope, it copies data back to `vec_a`, `vec_b` and `vec_c`. The memory movement between host and device is handled implicitly in buffer's constructor and descructor. 
 
 * **Command Group**
 A command group is a single unit of work that will be executed on device. You can see the command group
@@ -133,20 +137,21 @@ command group to the device asynchronously. The submit command will return immed
 3. **command group handler**: the argument `cgh` indicates that the accessor will be available in kernel within this command group scope.
 
 * **Kernel Function**:
-Kernel function is defined with 2 element: data parallel model and kernel function. 
+Kernel function is defined with 2 element: data parallel model and kernel function body. 
 ```C++
          cgh.parallel_for<class VectorAdd>(range<1>(ArraySize), [=] (item<1> item) {
             c_acc[item] = a_acc[item] + b_acc[item];
          });
 ```
-In this example, data parallel model are defined by `parallel_for` API and `range` argument, combined, they indicaites the kernel will follow basic data parallel model execute as multiple **work-items**. Other data parallel models are work-group data parallel, single task and hierarchical data parallel.  
+In this example, data parallel model are defined by `parallel_for` API and `range` argument. Combined, they indicaites the kernel will follow basic data parallel model execute as multiple **work-items (thread)**. Other data parallel models are work-group data parallel, single task and hierarchical data parallel.  
 
-Kernel function body is encapsulated as a function object, it requires `item` as it's argument which matches basic data parallel model. In side the kernel function body, we add value from buffer `a_sycl` and `b_sycl` and save the result in `c_sycl` through accessors. `item` which used like a array index, it's the **work-item id**.
+Kernel function body is encapsulated as a function object, it accepts an `item` as argument instructed by basic data parallel model. In side the kernel function body, we add value from buffer `a_sycl` and `b_sycl` and save the result in `c_sycl` through accessors. `item` is **work-item id** (think of it as thread id) which tells the kernel that each execution of instance only add the value at thread_id position. Together, all threads will run in parallel to finish the work.
 
 `class VectorAdd` which used as a templated parameter is just to give the kernel a name. 
 
 
-Compared to OpenCL, SYCL provides serveral advantages:
+## Summary
+SYCL is a huge leap forward compared to OpenCL. It provides serveral advantages:
 * **C++ language**: Developers can leverage C++ features like template to make the code more expressible
 and elegant. Also SYCL built-in APIs for queue, buffers are RAII types, which means developers has less book keeping job to control the life cycle of them.
 
@@ -155,13 +160,8 @@ and elegant. Also SYCL built-in APIs for queue, buffers are RAII types, which me
 * **Implicit Data Movement Support**: Unlike OpenCL where a lot of boileplate code are needed for data
 transfer between host and device, SYCL provide class "SYCL buffer" and runtime support to help automatically deduce memory movement. We will see it in the example.
 
-In this article, we will look at a simple example that performs element wise sum.
-
-
-## Summary
-In this article, we demonstrate the basics of SYCL by going through a simple example. It covers
-a complete SYCL application including:
-* construct host program
-* write kernel function
-* launch kernel from host
-
+We went through a "vector add" SYCL application which include all the basic elements:
+* Declare a SYCL queue object associated with certain device.
+* Use buffers to implicitly tranfer owner ship of memory between host and device.
+* Write a command group that includes kernel function and accessros. Submit it to device.
+The terms may be overwhelming at this point especially if you are new to heterogenous computing. They will be covered in following tutprials.
