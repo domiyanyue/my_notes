@@ -151,7 +151,7 @@ Kernel name is marked with `class VectorAdd`. Notice, it it a type and must be a
 In this tutorial, we studied a "vector add" which includes basic elements of a SYCL program:
 * Declare a SYCL queue object associated with certain devices.
 * Use buffers to implicitly transfer ownership of memory between host and device.
-* Write a command group that includes kernel function and accessors. Submit it to the device.
+* Write a command group that includes kernel function and accessors and submit it to the device.
 
 From this example, we experience some of SYCL's advantages:
 * **C++ language**: Developers can leverage C++ features to make the code more expressible. Also SYCL built-in APIs for queue, buffers are RAII types, which means developers has less bookkeeping job to control the life cycle of them.
