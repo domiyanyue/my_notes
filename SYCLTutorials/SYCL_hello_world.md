@@ -63,7 +63,7 @@ int main() {
 
 ```
 Let's break it down to the basic build blocks of a SYCL application:
-* **Header Files Inclusion**
+* **Include Header Files**
 ```C++
 #include <CL/sycl.hpp>
 
@@ -77,7 +77,7 @@ default_selector device_selector;
 ```
 This is how you specify the device (CPU, GPU, FPGA, etc) to execute on. SYCL provides a `default_selector` that will select an existing device in the system. SYCL also provides `cpu_selector`, `gpu_selector`, and allow you to customize your selector. In this example, we choose `default_selector` which let runtime picks for us.
 
-* **Setup Buffers between host and device**
+* **Setup Buffers**
 ```C++
 {
       buffer<float, 1> a_sycl(vec_a.data(), ArraySize);
@@ -90,7 +90,7 @@ In the first line of this example, we create a 1-dimensional buffer object of co
 
 Notice in the code there is a scope `{}` around buffers. This scope defines the life-span of buffer. When the buffer is constructed inside the scope, it automatically gets the ownership of the data. When the buffer goes out of scope, it copies data back to `vec_a`, `vec_b` and `vec_c`. The memory movement between host and device is handled implicitly in the buffer's constructor and destructor. 
 
-* **Command Group**
+* **Create Command Group**
 A command group is a single unit of work that will be executed on the device. You can see the command group
 is passed as a functor (function object) parameter to to `submit` function. It also accepts a parameter `handler` constructed by SYCL runtime which gives users the ability to access command group scope APIs. 
 ```C++
@@ -133,7 +133,7 @@ queue specifying the device it will submit to. Then we submit a command group to
 2. **access mode**: passed as template parameter. Typical values are read, write, read_write. This gives hints to the compiler to optimize the implementation. 
 3. **command group handler**: the argument `cgh` indicates that the accessor will be available in kernel within this command group scope.
 
-* **Kernel Function**:
+* **Write Kernel Function**:
 A kernel function is defined with 3 parts: data parallel model, kernel function body and kernel name. 
 ```C++
          cgh.parallel_for<class VectorAdd>(range<1>(ArraySize), [=] (item<1> item) {
