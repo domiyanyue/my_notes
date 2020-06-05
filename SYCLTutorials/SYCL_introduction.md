@@ -107,7 +107,7 @@ is passed as a functor (function object) parameter to to `submit` function. It a
          }); // end of command group
       });
 ```
-In this case, the command group consists of a kernel function (defined by a kernel function enqueue API `parallel_for` which we will introduce later) and inputs and outputs defined by **accessor** object initialized by `get_access` API. 
+In this case, the command group consists of a kernel function (defined by a kernel function enqueue API `parallel_for` which we will introduce later) and inputs and outputs defined by **accessor** object initialized by `get_access` API. I will cover kernel function and accessor in the following content.
 
 ### Construct Command Queue and Submit Command Group
 ```C++
