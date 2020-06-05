@@ -6,7 +6,7 @@ Welcome to my SYCL tutorial! SYCL is a single source heterogeneous programming m
 Heterogenous computing refers to systems that use more than one kind of processor (CPU + GPU, CPU + FPGA, CPU + DSP, etc.). To make programming for heterogeneous systems easy, people have come up with different programming models including OpenCL, CUDA, OpenACC, etc. 
 OpenCL is one of the widely adopted one. It has a well-defined execution model that is portable across all types of devices. 
 However, OpenCL received three major complaints:
-1. Limited support for C++. Developers do not benefit from new features in modern C++.  
+1. Limited support for C++. OpenCL is mostly based on C99 standard. Developers do not benefit from new features in modern C++.  
 2. The weak link between the host and device code is error-prone. Developers have to write in 2 different languages and compile host and device parts using different compilers. Often, users have to write their stringify script to automate the development process.
 3. OpenCL is too verbose for many developers who don't want to explicitly write every low-level operation like memory transaction between host and device.
 
