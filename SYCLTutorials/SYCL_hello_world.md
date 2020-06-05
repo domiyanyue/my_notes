@@ -115,27 +115,36 @@ In this example and most cases, the command group consists of a kernel function 
 	}
 ```
 A SYCL **queue** connects **command groups** with certain device. In this example, We first construct a
-queue specifying all **command groups** submited by this queue will run on `device_selector` (argument). Then we submit a command group to the device asynchronously. The submit command will return immediately and the execution of command group will start later.
+queue specifying all **command groups** submited by this queue will run on `device_selector` (argument). Then we submit a
+command group to the device asynchronously. The submit command will return immediately and the execution of command group will start later.
 
 * **Specify Accessors**
+
+**accessor** is **the class** to access buffer in SYCL. In this example, they are declared in command group to specify inputs and outputs from/to global memory.
+
 ```C++
          auto a_acc = a_sycl.get_access<access::mode::read>(cgh);
          auto b_acc = b_sycl.get_access<access::mode::read>(cgh);
          auto c_acc = c_sycl.get_access<access::mode::write>(cgh);
 ```
-Above commands create **accessors** which read from/write to memory. In this case, it gives us access to formerly created **buffer** objects. **accessor** is the only way to access buffer in SYCL. When creating an accessor, we have to provide:
-1. `access mode` (read, write, read_write, etc.) as template parameter to specify the baivour of accessor. Compiler can optimizate the code if it knows the accessor's limitation -- i.e., read only or write only.
-2. A **command group handler** `cgh` which indicates that the accessor will be available in kernel within this command group scope. This looks strange to me at the beginning. it hascertain language concern, for now, you don't have to worry too much about it. Just remeber to pass in the handler when creating an accessor. 
+`<buffer>.get_access` returns accessor and gives it access to formerly created **buffer** `(a_sycl, b_sycl, c_sycl)` objects. For every accessor, there are three basic attributes:
+1. **buffer**: memory it access which is determined when created. 
+2. **access mode**: passed as template parameter. Typical values are read, write, read_write. This gives hints to the compiler to optimize the implimentation. 
+3. **command group handler**: the argument `cgh` indicates that the accessor will be available in kernel within this command group scope.
 
 * **Kernel Function**:
+Kernel function is defined with 2 element: data parallel model and kernel function. 
 ```C++
          cgh.parallel_for<class VectorAdd>(range<1>(ArraySize), [=] (item<1> item) {
             c_acc[item] = a_acc[item] + b_acc[item];
          });
 ```
-Kernel code is defined as a lambda expression, `parallel_for` here is a API defining the execution model of the kernel, `class VectorAdd` is a templated parameter by design to give the kernel a name. You can see we don't have a defin
+In this example, data parallel model are defined by `parallel_for` API and `range` argument, combined, they indicaites the kernel will follow basic data parallel model execute as multiple **work-items**. Other data parallel models are work-group data parallel, single task and hierarchical data parallel.  
 
-SYCL is a royalty-free, cross-platform abstraction layer built on top of OpenCL. SYCL language spec is based on mordern C++ (C++11 and beyond). This enables codes to be written in a single-source style completely in standard C++. 
+Kernel function body is encapsulated as a function object, it requires `item` as it's argument which matches basic data parallel model. In side the kernel function body, we add value from buffer `a_sycl` and `b_sycl` and save the result in `c_sycl` through accessors. `item` which used like a array index, it's the **work-item id**.
+
+`class VectorAdd` which used as a templated parameter is just to give the kernel a name. 
+
 
 Compared to OpenCL, SYCL provides serveral advantages:
 * **C++ language**: Developers can leverage C++ features like template to make the code more expressible
