@@ -97,7 +97,7 @@ is passed as a functor (function object) parameter to to `submit` function. It a
 ```C++
       queue.submit([&] (handler& cgh) { // start of command group
          // inputs and outputs accessor
-     auto a_acc = a_sycl.get_access<access::mode::read>(cgh);
+         auto a_acc = a_sycl.get_access<access::mode::read>(cgh);
          auto b_acc = b_sycl.get_access<access::mode::read>(cgh);
          auto c_acc = c_sycl.get_access<access::mode::write>(cgh);
      
@@ -107,7 +107,7 @@ is passed as a functor (function object) parameter to to `submit` function. It a
          }); // end of command group
       });
 ```
-In this example and most cases, the command group consists of a kernel function (defined by a kernel function enqueue API `parallel_for` which we will introduce later) and inputs and outputs defined by **accessor** object initialized by `get_access` API. 
+In this case, the command group consists of a kernel function (defined by a kernel function enqueue API `parallel_for` which we will introduce later) and inputs and outputs defined by **accessor** object initialized by `get_access` API. 
 
 * **Construct Command Queue and Submit Command Group**
 ```C++
@@ -117,50 +117,51 @@ In this example and most cases, the command group consists of a kernel function 
     ...
     }
 ```
-A SYCL **queue** connects **command groups** with a certain device. In this example, We first construct a
-queue specifying all **command groups** submitted by this queue will run on `device_selector` (argument). Then we submit a
-command group to the device asynchronously. The submit command will return immediately and the execution of the command group will start later.
+A SYCL **queue** connects (submit and trigger execution) **command groups** to a certain device. In this example, We first construct a
+queue specifying the device it will submit to. Then we submit a command group to the device asynchronously. The submit command will return immediately and the execution of the command group will start later.
 
 * **Specify Accessors**
 
-**accessor** is **the class** to access buffer in SYCL. In this example, they are declared in command group to specify inputs and outputs from/to global memory.
+**accessor** is the class to access buffer in SYCL. In this example, they are declared in command group to specify inputs and outputs from/to global memory.
 
 ```C++
          auto a_acc = a_sycl.get_access<access::mode::read>(cgh);
          auto b_acc = b_sycl.get_access<access::mode::read>(cgh);
          auto c_acc = c_sycl.get_access<access::mode::write>(cgh);
 ```
-`<buffer>.get_access` returns accessor and gives it access to formerly created **buffer** `(a_sycl, b_sycl, c_sycl)` objects. For every accessor, there are three basic attributes:
+`<buffer>.get_access` returns accessor and gives it access to formerly created **buffer** objects `(a_sycl, b_sycl, c_sycl)`. For every accessor, there are three basic attributes:
 1. **buffer**: memory it access which is determined when created. 
 2. **access mode**: passed as template parameter. Typical values are read, write, read_write. This gives hints to the compiler to optimize the implementation. 
 3. **command group handler**: the argument `cgh` indicates that the accessor will be available in kernel within this command group scope.
 
 * **Kernel Function**:
-A kernel function is defined with 2 elements: data parallel model and kernel function body. 
+A kernel function is defined with 3 parts: data parallel model, kernel function body and kernel name. 
 ```C++
          cgh.parallel_for<class VectorAdd>(range<1>(ArraySize), [=] (item<1> item) {
             c_acc[item] = a_acc[item] + b_acc[item];
          });
 ```
-In this example, data parallel model is defined by `parallel_for` API and `range` argument. Combined, they indicates the kernel will follow basic data parallel model execute as multiple **work-items (thread)**. Other data parallel models are work-group data parallel, single task, and hierarchical data parallel.  
+In this example, data parallel model is defined by `parallel_for` API and `range` argument's type. Combined, they indicates the kernel will follow basic data parallel model which execute as multiple **work-items (threads)**. Other data parallel models are work-group data parallel, single task, and hierarchical data parallel.  
 
-The kernel function body is encapsulated as a function object, it accepts an `item` as argument instructed by basic data parallel model. Inside the kernel function body, we add value from buffer `a_sycl` and `b_sycl` and save the result in `c_sycl` through accessors. `item` is **work-item id** (think of it as thread id) which tells the kernel that each execution of instance only add the value at thread_id position. Together, all threads will run in parallel to finish the work.
+The kernel function body is encapsulated as a function object. It accepts an `item` as argument instructed by basic data parallel model. Inside the kernel function body, we add value from buffer `a_sycl` and `b_sycl` and save the result in `c_sycl` through accessors. Kernel argument `item` is **work-item id** (think of it as thread id) which tells the kernel that each execution of instance only add the value at **work-item id** position. Together, all threads will run in parallel to finish the work.
 
-`class VectorAdd` which used as a templated parameter is just to give the kernel a name. 
-
+Kernel name is marked with `class VectorAdd`. Notice, it it a type and must be a class declared in global scope. 
 
 ## Summary
-SYCL is a huge leap forward compared to OpenCL. It provides several advantages:
-* **C++ language**: Developers can leverage C++ features like template to make the code more expressible
-and elegant. Also SYCL built-in APIs for queue, buffers are RAII types, which means developers has less bookkeeping job to control the life cycle of them.
 
-* **Single Source**: SYCL host and device code can exist in the same file. It's compilers' job to extract device code from the file and hand it off to the selected device backend compiler. You don't have to run 2 compiles separately on host and device anymore. This allows the project to be better organized and deployed.
-
-* **Implicit Data Movement Support**: Unlike OpenCL where a lot of boilerplate code is needed for data
-transfer between host and device, SYCL provides class "SYCL buffer" and runtime support to help automatically deduce memory movement. We will see it in the example.
-
-We went through a "vector add" SYCL application which includes all the basic elements:
+In this tutorial, we studied a "vector add" which includes basic elements of a SYCL program:
 * Declare a SYCL queue object associated with certain devices.
 * Use buffers to implicitly transfer ownership of memory between host and device.
 * Write a command group that includes kernel function and accessors. Submit it to the device.
-The terms may be overwhelming at this point especially if you are new to heterogeneous computing. They will be covered in the following tutorials.
+
+From this example, we experience some of SYCL's advantages:
+* **C++ language**: Developers can leverage C++ features to make the code more expressible. Also SYCL built-in APIs for queue, buffers are RAII types, which means developers has less bookkeeping job to control the life cycle of them.
+
+* **Single Source**: SYCL host and device code can exist in the same file. You don't have to run 2 compiles separately on host and device anymore. This allows the project to be better organized and deployed.
+
+* **Implicit Data Movement Support**: Unlike OpenCL and some other language where a lot of boilerplate code is needed for data
+transfer between host and device, SYCL provides class "SYCL buffer" and runtime support to help automatically deduce memory movement.
+
+The new terms introduced in this tutorial may be overwhelming at this point especially if you are new to heterogeneous computing. They will be covered in the following tutorials. Stay tuned! 
+
+
