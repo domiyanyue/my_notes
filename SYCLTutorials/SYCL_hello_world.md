@@ -153,8 +153,8 @@ In this tutorial, we studied a "vector add" which includes basic elements of a S
 * Use buffers to implicitly transfer ownership of memory between host and device.
 * Write a command group that includes kernel function and accessors and submit it to the device.
 
-From this example, we experience some of SYCL's advantages:
-* **C++ language**: Developers can leverage C++ features to make the code more expressible. Also SYCL built-in APIs for queue, buffers are RAII types, which means developers has less bookkeeping job to control the life cycle of them.
+We experienced SYCL's advantages as a programmnig model:
+* **Support C++ language**: Developers can leverage C++ features to make the code more expressible. Also SYCL built-in APIs for queue, buffers are RAII types, which means developers has less bookkeeping job to control the life cycle of them.
 
 * **Single Source**: SYCL host and device code can exist in the same file. You don't have to run 2 compiles separately on host and device anymore. This allows the project to be better organized and deployed.
 
