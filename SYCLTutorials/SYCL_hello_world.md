@@ -1,24 +1,24 @@
 # Introduction to SYCL
 
-Welcome to my SYCL tutorial! SYCL is a single source heteogeous programming model built on top of OpenCL that allow programmers to write heterogenous application completely using C++. If you are familiar with OpenCL, the concepts in this tutorial should be familiar to you and you can focus on what's new in SYCL. If you are not, don't worry, this won't require any background knowledge in OpenCL. 
+Welcome to my SYCL tutorial! SYCL is a single source heterogeneous programming model built on top of OpenCL that allows programmers to write heterogeneous application completely using C++. If you are familiar with OpenCL, the concepts in this tutorial should be familiar to you and you can focus on what's new in SYCL. If you are not, don't worry, this won't require any background knowledge in OpenCL. 
 
 ## A Brief Background 
-Heterogenous computing refer to systems that uses more than one kind of processors (CPU + GPU, CPU + FPGA, CPU + DSP). To make programming for heterogeous system easy, people have come up with different programming models including OpenCL, CUDA, OpenACC, etc. 
-OpenCL is one of the widely adopted one. It has a well-defined execution model that is portable across all type of devices. 
-However, OpenCL also received a lot of complains:
-1. Limited support for C++. Developers do not benefit from new features in modern in C++.  
-2. The weak link between host and device code is error-prone. Developers have to write in 2 different languages and compile host and device part using different compilers. Oftenly, users have to write their stringgify script to automate the development process.
-3. OpenCL is too verbose for many developers who don't want to explictily write every low-level operation like memory transaction between host and device.
+Heterogenous computing refers to systems that use more than one kind of processor (CPU + GPU, CPU + FPGA, CPU + DSP). To make programming for heterogeneous systems easy, people have come up with different programming models including OpenCL, CUDA, OpenACC, etc. 
+OpenCL is one of the widely adopted one. It has a well-defined execution model that is portable across all types of devices. 
+However, OpenCL also received a lot of complaints:
+1. Limited support for C++. Developers do not benefit from new features in modern C++.  
+2. The weak link between the host and device code is error-prone. Developers have to write in 2 different languages and compile host and device parts using different compilers. Often, users have to write their stringify script to automate the development process.
+3. OpenCL is too verbose for many developers who don't want to explicitly write every low-level operation like memory transaction between host and device.
 
-SYCL was born reactive to OpenCL's pros and cons and aimed to a better heterogenous framework.
-1. It inheritant the good execution model of OpenCL.
+SYCL was born reactive to OpenCL's pros and cons and aimed at a better heterogeneous framework.
+1. It inherited the good execution model of OpenCL.
 2. SYCL is purely based on C++. 
-3. SYCL is a single source (no serparation of device and host) programming model that allow developers to express at a high level of abstraction.            
+3. SYCL is a single source (no separation of device and host) programming model that allows developers to express at a high level of abstraction.            
 
-## What does SYCL looks like : Example Simple Vector Add
-I will lead you through a simple SYCL code sample. Hopefully this gives you an idea of the structure of a SYCL application.
+## What does SYCL looks like Example Simple Vector Add
+I will lead you through a simple SYCL code sample. Hopefully, this gives you an idea of the structure of an SYCL application.
 Please don't pay too much attention to details, I will mention them but just for the purpose of understanding the basics.
-Notice, it is important that you know know C++ functor and lambda express which is described here. 
+Notice, it is important that you know C++ functor and lambda express which is described here. 
 
 ```C++
 #include <iostream>
@@ -59,12 +59,12 @@ int main() {
    for(int i = 0; i < ArraySize; i++){
        std::cout << vec_a[i] << " + " << vec_b[i] <<  " = " << vec_c[i] << std::endl;
    }
-		
+        
    return 0;
 }
 
 ```
-Let's break it down to the basic build blocks of a SYCL application:
+Let's break it down to the basic build blocks of an SYCL application:
 * **Header Files Inclusion**
 ```C++
 #include <CL/sycl.hpp>
@@ -98,11 +98,11 @@ is passed as a functor (function object) parameter to to `submit` function. It a
 ```C++
       queue.submit([&] (handler& cgh) { // start of command group
          // inputs and outputs accessor
-	 auto a_acc = a_sycl.get_access<access::mode::read>(cgh);
+     auto a_acc = a_sycl.get_access<access::mode::read>(cgh);
          auto b_acc = b_sycl.get_access<access::mode::read>(cgh);
          auto c_acc = c_sycl.get_access<access::mode::write>(cgh);
-	 
-	 // kernel function enqueue API `parallel_for`
+     
+     // kernel function enqueue API `parallel_for`
          cgh.parallel_for<class VectorAdd>(range<1>(ArraySize), [=] (item<1> item) {
             c_acc[item] = a_acc[item] + b_acc[item];
          }); // end of command group
@@ -113,10 +113,10 @@ In this example and most cases, the command group consists of a kernel function 
 * **Construct Command Queue and Submit Command Group**
 ```C++
 ...
-	queue queue(device_selector);
-	queue.submit([&] (handler& cgh) {
-	...
-	}
+    queue queue(device_selector);
+    queue.submit([&] (handler& cgh) {
+    ...
+    }
 ```
 A SYCL **queue** connects **command groups** with certain device. In this example, We first construct a
 queue specifying all **command groups** submited by this queue will run on `device_selector` (argument). Then we submit a
