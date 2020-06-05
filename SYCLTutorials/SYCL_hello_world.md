@@ -16,8 +16,7 @@ SYCL was born reactive to OpenCL's pros and cons and aimed at a better heterogen
 3. SYCL is a single source (no separation of device and host) programming model that allows developers to express at a high level of abstraction.            
 
 ## What Does SYCL Look Like? 
-I will lead you through a simple SYCL code sample that perform simple vector add. This will give you an idea of the structure of a SYCL application.
-Please don't pay too much attention to details but focus on the higher level concepts at the momenent. Here is the full appplication code:
+I will lead you through a simple SYCL code sample performing vector add. This will give you an idea of the structure of a SYCL application. Please don't pay too much attention to details but focus on the higher level concepts. Here is the code:
 
 ```C++
 #include <iostream>
@@ -76,7 +75,7 @@ SYCL applications must include `CL/sycl.hpp` which contains APIs for SYCL runtim
 ```C++
 default_selector device_selector;
 ```
-This is how you specify the device (CPU, GPU, FPGA, etc) to execute on. SYCL provides a `default_selector` that will select an existing device in the system. SYCL also provides `cpu_selector`, `gpu_selector`, and allow you to customize your selector. In this example, we choose `default_selector` which is the device runtime picks for us.
+This is how you specify the device (CPU, GPU, FPGA, etc) to execute on. SYCL provides a `default_selector` that will select an existing device in the system. SYCL also provides `cpu_selector`, `gpu_selector`, and allow you to customize your selector. In this example, we choose `default_selector` which let runtime picks for us.
 
 * **Setup Buffers between host and device**
 ```C++
@@ -86,7 +85,7 @@ This is how you specify the device (CPU, GPU, FPGA, etc) to execute on. SYCL pro
       buffer<float, 1> c_sycl(vec_c.data(), ArraySize);
 }
 ```
-In SYCL, a buffer is used to maintain an area of memory that can be shared between the host and one or more devices. Here we instantiate a **buffer type** with two *template arguments*: data type `float` and data dimension `1`. We also construct a **buffer instance** with two arguments: the first is the data source and the second one is the number of elements. SYCL provides interfaces for constructing buffers from different types of data sources like `std::vector` or `C arrays`.  
+In SYCL, a buffer is used to maintain an area of memory that can be shared between the host and one or more devices. Here we instantiate a **buffer type** with two *template parameters*: data type `float` and data dimension `1`. We also construct a **buffer instance** with two arguments: the first is the data source and the second one is the number of elements. SYCL provides interfaces for constructing buffers from different types of data sources like `std::vector` or `C arrays`.  
 In the first line of this example, we create a 1-dimensional buffer object of containing element `float` of size `ArraySize` and initialized it with data in `vec_a`. 
 
 Notice in the code there is a scope `{}` around buffers. This scope defines the life-span of buffer. When the buffer is constructed inside the scope, it automatically gets the ownership of the data. When the buffer goes out of scope, it copies data back to `vec_a`, `vec_b` and `vec_c`. The memory movement between host and device is handled implicitly in the buffer's constructor and destructor. 
