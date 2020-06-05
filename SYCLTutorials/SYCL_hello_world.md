@@ -15,10 +15,9 @@ SYCL was born reactive to OpenCL's pros and cons and aimed at a better heterogen
 2. SYCL is purely based on C++. 
 3. SYCL is a single source (no separation of device and host) programming model that allows developers to express at a high level of abstraction.            
 
-## What does SYCL looks like Example Simple Vector Add
-I will lead you through a simple SYCL code sample. Hopefully, this gives you an idea of the structure of a SYCL application.
-Please don't pay too much attention to details, I will mention them but just to understand the basics.
-Notice, it is important that you know C++ functor and lambda express which is described here. 
+## What does SYCL looks like? 
+I will lead you through a simple SYCL code sample that perform simple vector add. This will give you an idea of the structure of a SYCL application.
+Please don't pay too much attention to details but focus on the higher level concepts at the momenent. Here is the full appplication code:
 
 ```C++
 #include <iostream>
