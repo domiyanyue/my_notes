@@ -93,7 +93,7 @@ Notice in the code there is a scope `{}` around buffers. This scope defines the 
 
 ### Create Command Group
 A command group is a single unit of work that will be executed on the device. You can see the command group
-is passed as a functor (function object) parameter to to `submit` function. It also accepts a parameter `handler` constructed by SYCL runtime which gives users the ability to access command group scope APIs. 
+is passed as a functor (function object) parameter to to `submit` function. It accepts a parameter `handler` constructed by SYCL runtime which gives users the ability to access command group scope APIs. 
 ```C++
       queue.submit([&] (handler& cgh) { // start of command group
          // inputs and outputs accessor
