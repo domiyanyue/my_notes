@@ -125,7 +125,7 @@ queue specifying all **command groups** submited by this queue will run on `devi
 ```
 Above commands create **accessors** which read from/write to memory. In this case, it gives us access to formerly created **buffer** objects. **accessor** is the only way to access buffer in SYCL. When creating an accessor, we have to provide:
 1. `access mode` (read, write, read_write, etc.) as template parameter to specify the baivour of accessor. Compiler can optimizate the code if it knows the accessor's limitation -- i.e., read only or write only.
-2. We also need to pass in a command group handler 
+2. A **command group handler** `cgh` which indicates that the accessor will be available in kernel within this command group scope. This looks strange to me at the beginning. it hascertain language concern, for now, you don't have to worry too much about it. Just remeber to pass in the handler when creating an accessor. 
 
 * **Kernel Function**:
 ```C++
