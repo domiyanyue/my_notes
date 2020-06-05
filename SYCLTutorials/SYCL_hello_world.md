@@ -76,7 +76,7 @@ SYCL applications must include `CL/sycl.hpp` which contains APIs for SYCL runtim
 ```C++
 default_selector device_selector;
 ```
-This is how you specify the device (CPU, GPU, FPGA, etc) to execute on. SYCL provides a `default_selector` that will select an existing device in the system. SYCL also provides `cpu_selector`, `gpu_selector`, and allow you to customize your selector. In this example, we will `default_selector` which uses the device runtime pick for us.
+This is how you specify the device (CPU, GPU, FPGA, etc) to execute on. SYCL provides a `default_selector` that will select an existing device in the system. SYCL also provides `cpu_selector`, `gpu_selector`, and allow you to customize your selector. In this example, we choose `default_selector` which is the device runtime picks for us.
 
 * **Setup Buffers between host and device**
 ```C++
