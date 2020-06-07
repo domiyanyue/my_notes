@@ -11,6 +11,4 @@ Recently, I switched to a new team building
 [EDA tool for FPGA](https://www.intel.com/content/www/us/en/software/programmable/quartus-prime/overview.html)
 to explore the underlying performance challenge for FPGA.
 
-This is my technical blog which I started in March 2020. 
-
 My current interests include: compile technology, heterogeneous computing, deep learning acceleration and software development practices.
