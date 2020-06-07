@@ -1,6 +1,4 @@
-# Summary of *On Writing Well*: Principles
-
-The first seven chapters of *On Writing Well* are on writing principles.
+# Summary of *On Writing Well*: Chapter 1-3
 
 ## Chatper 1: Transaction
 Writing is not easy, words seldoms flow. It requires hard work and frequent practices to be a good writer. 
