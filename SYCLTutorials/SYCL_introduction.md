@@ -3,14 +3,17 @@
 Welcome to my SYCL tutorial! SYCL is a single source heterogeneous programming model built on top of OpenCL that allows programmers to write heterogeneous application completely using C++. If you are familiar with OpenCL, the concepts in this tutorial should be familiar to you and you can focus on what's new in SYCL. If you are not, don't worry, this won't require any background knowledge in OpenCL. 
 
 ## A Brief Background 
-Heterogenous computing refers to systems that use more than one kind of processor (CPU + GPU, CPU + FPGA, CPU + DSP, etc.). To make programming for heterogeneous systems easy, people have come up with different programming models including OpenCL, CUDA, OpenACC, etc. 
-OpenCL is one of the widely adopted one. It has a well-defined execution model that is portable across all types of devices. 
-However, OpenCL received three major complaints:
+Heterogenous computing refers to systems that use more than one kind of processor. The types of processors can be combinations of CPU, GPU, FPGA, DSP, etc. In recently years(2010 -), the slowing down of Moore's Law has limited the speedup of general purpose (CPU-centric) compute platform. Many compute intensive tasks has switched to heterogeous computing including machine learning, image processing, natural language processing and big data application. 
+
+Various of heterogenous programming model emerged to make programming for heterogeneous systems easy such as OpenCL, CUDA, OpenACC, etc. OpenCL is one of the widely adopted one by most hardware vendors. It has a well-defined execution model that is portable across all types of devices.  However, OpenCL suffered from three major complaints:
+
 1. Limited support for C++. OpenCL is originally based on C99 standard. Developers do not benefit from new features in modern C++.  
+
 2. The weak link between the host and device code is error-prone. Developers have to write in 2 different languages and compile host and device parts using different compilers. Often, users have to write their stringify script for purpose like code generation to automate the development process.
+
 3. OpenCL is too verbose for many developers who don't want to explicitly write every low-level operation like memory transaction between host and device.
 
-SYCL was born reactive to OpenCL's pros and cons and aimed at a better heterogeneous framework.
+SYCL was born reactive to OpenCL's pros and cons and aimed to be better heterogeneous framework.
 1. It inherited the good execution model of OpenCL.
 2. SYCL is purely based on C++. 
 3. SYCL is a single source (no separation of device and host) programming model.
