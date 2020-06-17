@@ -19,6 +19,9 @@ SYCL was born reactive to OpenCL's pros and cons and aimed to be better heteroge
 3. SYCL is a single source (no separation of device and host) programming model.
 4. SYCL extends the programming model that allows developers to express at a high level of abstraction.           
 
+## Basic Structure of A Heterogeous Application
+Before jumping into SYCL code, we need to understand the basic structure of a heteregeous application. 
+
 ## What Does SYCL Look Like? 
 I will lead you through a simple SYCL code sample performing vector add. This will give you an idea of the structure of a SYCL application. Please don't pay too much attention to details but focus on the higher level concepts. Here is the code:
 
