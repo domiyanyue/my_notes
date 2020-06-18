@@ -1,7 +1,7 @@
 # Summary of *On Writing Well*: Chapter 4-7
 
 ## Chapter 4: Style
-The fundamental rule is: be yourself. It requires writes to do 2 things together - relax and have confidence - which is nearly impossible. Try to write in first person if possible: to use "I", "me", "we" and "us". If not allowed, at least think "I" while writing. Sell yourself and your subject will exert its own appeal. Writing is an act of ego, use its energy to keep yourself going.
+The fundamental rule is: be yourself. It requires writers to do 2 things together - relax and have confidence - which is nearly impossible. Try to write in first person if possible: to use "I", "me", "we" and "us". If not allowed, at least think "I" while writing. Sell yourself and your subject will exert its own appeal. Writing is an act of ego, use its energy to keep yourself going.
 
 ## Chapter 5: The Audience
 "Who am I writing for?" The fundamental answer is you are writing for yourself. Never say anything in writing that you wouldn't comfortably say in conversation.
