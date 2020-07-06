@@ -63,4 +63,42 @@ initial begin
     req_1 = 0;
 end
  ```
+ 
+ ### Always Blocks
+ An always block executes always. An always block should have a sensitive list or a delay associated with it.
+ 	
+The sensitive list is the one which tells the always block when to execute the block of code, as shown in the figure below. The @ symbol after reserved word ' always', indicates that the block will be triggered "at" the condition in parenthesis after symbol @.
+
+One important note about always block: it can not drive wire data type, but can drive reg and integer data types.
+
+```
+always  @ (a or b or sel)
+begin
+  y = 0;
+  if (sel == 0) begin
+  y = a;
+  end else begin
+  y = b;
+  end
+end
+```
+
+```
+always  @ (posedge clk )
+if (reset == 0) begin
+  y <= 0;
+  end else if (sel == 0) begin
+  y <= a;
+  end else begin
+  y <= b;
+end
+```
+
+```
+always  begin
+  #5  clk = ~clk;
+end
+```
+#5 in front of the statement delays its execution by 5 time units.
+ 
 
