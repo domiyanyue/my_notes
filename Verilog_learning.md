@@ -54,7 +54,7 @@ If-else and case statements require all the cases to be covered for combinationa
 - There is a third block, which is used in test benches only: it is called Initial statement.
 
 ### Initial Block
-	
+An initial block, as the name suggests, is executed only once when simulation starts. This is useful in writing test benches. If we have multiple initial blocks, then all of them are executed at the beginning of simulation.
 ```
 initial begin
     clk = 0;
