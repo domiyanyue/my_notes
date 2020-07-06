@@ -52,3 +52,14 @@ If-else and case statements require all the cases to be covered for combinationa
 - Combinational elements can be modeled using assign and always statements.
 - Sequential elements can be modeled using only always statement.
 - There is a third block, which is used in test benches only: it is called Initial statement.
+
+### Initial Block
+	
+```
+initial begin
+    clk = 0;
+    reset = 0;
+    req_0 = 0;
+    req_1 = 0;
+end
+ ```
