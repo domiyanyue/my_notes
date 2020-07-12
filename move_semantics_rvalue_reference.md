@@ -6,7 +6,7 @@ Move semantics and rvalue reference are two powerful yet confusing features adde
 
 ## Problem: Unnecessary Copy of Objects
 
-One of C++'s advantages is it can produce fast programs. However, one problem has existed to slow down C++ programs C++11: unnecessary copy of objects.
+One of C++'s advantages is it can produce fast programs. However, one problem has existed to slow down C++ programs before C++11: unnecessary copy of objects.
 Take a look at following example:
 
 ```C++
@@ -64,13 +64,20 @@ main.cpp:13:15: error: lvalue required as left operand of assignment
 ```
 Make sense, right? As we said, Assignments operator requires lvalues as left operand.
 
-
-For the discussion of this article, we want to perticularly point out that reference type in C++ are lvalues and can appear on the left side of assignment operator.
+We want to perticularly point out that reference type in C++ are lvalues and can appear on the left side of assignment operator.
 ```C++
 int a = 1;
 int& b = a; // b is a reference type and is a alias of a 
 b = 2;
 ```
+On typical example of assigning to reference type is the overloading of brackets operator `[]` in some classes like `std::map` to perform index accessing. 
+
+```C++
+std::map<int, string> lookup;
+lookup[2] = "hello";
+```
+The overloaded `[]` operator for class `std::map` returns a reference type to `string` which is lvalue. This makes index accessing access possible with assignment operator.
+
 
 ## Rvalue Reference 
 Prior to C++11, only one type of reference exits in C++: reference or lvalue reference (post C++11). Reference type give us an easy way to refer to the object without copying it. Like in the first example, we can pass in the return value as a reference type. Because of lvalue reference, we can deal lvalue without copying. But what about rvalues? They can only be assigned to non-modifiable lvalue references. For example:
