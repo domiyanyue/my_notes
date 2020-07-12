@@ -30,17 +30,17 @@ Before C++11, the above code will generate terrible performance due to copy of a
 function createArray, the second is when we assign the return value to `vec_a` in main function. The first copy can be avoid if compiler applies "return value optimization".
 The second is unavoidable because a copy constructor of vector is called which will allocate memory space for vec_a and copy values from temproary values returned by function createArray. 
 
-The real problem is we don't want to create temprorary objects and copy from it. To avoid it, there are serveral ways C++ programmers can avoid it like returning a pointer to vector or pass in the return value as a reference. Both can save performance issue but are not natural forms of programming. 
+The root problem is we don't want to create temprorary objects and copy from it. To avoid it, there are serveral ways C++ programmers can avoid it like returning a pointer to vector or pass in the return value as a reference. Both can save performance issue but are not natural forms of programming. 
 
 Move semantic is introduced to address this, avoid copying when assigning a temprorary value that is about to disappear to another value. Before we introduce move semantic, we have to introduce some concepts to help you understand better - lvalue, rvalues and rvalue references.
 
 ## Lvalues and Rvalues
 
-Lvalue and rvalue are **value categories**. In C++, each expression has 2 independent properties: value type and value category. Value category defines some basic rules compiler must follow when creating, assigning, copying objects when evaluating the expression. The actual definition of lvalue and rvalue are shockingly completely. In this article, I will give you a simplified view that is enough for most cases. 
+Lvalue and rvalue are **value categories**. In C++, each expression has 2 independent properties: value type and value category. Value category defines some basic rules compiler must follow when creating, assigning, copying objects when evaluating the expression. The actual definition of lvalue and rvalue are shockingly complicated. In this article, I will give you a simplified view that is enough to explain most cases. 
 
 An **lvalue** represents an object that occupies some identifiable location in memory.
 An **rvalue** is defined by exclusion, by saying an expression is an rvalue if it's not lvalue.
-Let look at some basic examples:
+Let's look at some basic examples:
 ```C++
 int a;
 a = 4;
@@ -51,7 +51,7 @@ Above is a legal assignment experssion in C++. `a` is an lvalue because it has a
 3 = 5;
 (a * 2) = 3;
 ```
-It's almost too obvious that the above statments make no sense. Why? The experssion on the left sides `3` and `(a * 2)` don't have identifiable memory locations (which by definition makes them rvalues not lvalues). Therefore they are illegal statements. In fact, rvalues are temprorary results of expressions, 'temprorary' means you can't locate them after this statement. Yes, they evaperates.
+It's almost too obvious that the above statments make no sense. Why? The experssion on the left sides `3` and `(a * 2)` don't have identifiable memory locations (which by definition makes them rvalues according to definition). Therefore they are illegal statements. In fact, rvalues are temprorary results of expressions, 'temprorary' means you can't locate them after this statement. 
 In fact, if you put them in a compiler (GCC), you will get an error: 
 
 ```
@@ -62,9 +62,10 @@ main.cpp:13:15: error: lvalue required as left operand of assignment
      (a * 2) = 3;
                ^
 ```
-Make sense, right? As we said, Assignments operator requires lvalues as left operand.
+Make sense, right? Because assignments operator requires lvalue as left operand.
 
-We want to perticularly point out that reference type in C++ are lvalues and can appear on the left side of assignment operator.
+### Reference type is lvalue
+It's worth pointing out that *reference type in C++ are lvalues* and can appear on the left side of assignment operator.
 ```C++
 int a = 1;
 int& b = a; // b is a reference type and is a alias of a 
@@ -78,6 +79,14 @@ lookup[2] = "hello";
 ```
 The overloaded `[]` operator for class `std::map` returns a reference type to `string` which is lvalue. This makes index accessing access possible with assignment operator.
 
+### lvalue to rvalue conversion
+In the following example, `+` takes two rvalues as argument and returns an rvalue.
+```C++
+int a = 1;
+int b = 2;
+int c = a + b;
+```
+We know both `a` and `b` are lvalues. In the third line, they undergo an implicit *lvalue-to-rvalue* conversion. All lvalues that aren't arrays, functions or of incomplete types can be convered to rvalues. However, rvalues can't be converted to lvalues. 
 
 ## Rvalue Reference 
 Prior to C++11, only one type of reference exits in C++: reference or lvalue reference (post C++11). Reference type give us an easy way to refer to the object without copying it. Like in the first example, we can pass in the return value as a reference type. Because of lvalue reference, we can deal lvalue without copying. But what about rvalues? They can only be assigned to non-modifiable lvalue references. For example:
