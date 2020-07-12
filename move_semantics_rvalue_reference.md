@@ -219,5 +219,9 @@ Another good thing here is move semantics (move constructor and move assignment 
 ## Summary
 In this article, we took a long short at understanding move semantics in C++:
 
-1. The general problem we want to solve is how to transfer the ownership of obects/pointers/variables efficiently withou unnecessary copy.
-2. 
+1. The general problem we want to solve is how to **transfer the ownership of obects/pointers/variables efficiently without unnecessary copy**.
+2. We went through a brief introduction of the concept of value category (lvalue and rvalue) to help understand how compiler views assignment, copy, construction
+and parameter passing. This also help us understand the missing part of the language - a reference type to rvalue. 
+3. Rvalue reference was introduced to let us declare a reference type to a temprorary objects. We can use `std::move` to explicitly cast a lvaue to rvalue reference type. 
+4. Move semantic is introduced when we pass in a parameter by rvalue reference. No copy happens when passing parameters. We also implimented move constructor in a simple customized class type. 
+
