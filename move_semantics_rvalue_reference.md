@@ -118,7 +118,12 @@ During initilization of rref, a temprorary object is created from literal `5`, t
 However, these are not the common use manners of rvalue reference. Rvalue references are more often used as function parameters to create *move constructor* and *move assignment operator*. 
 
 ## Move Semantics
-In the fisrt example, we identified the unnecessary copy problem. With rvalue reference, we can use move semantics to solve this.
+In the fisrt example, we identified the unnecessary copy problem. With rvalue reference, we can use move semantics to solve this. Before we build a class that utilize move semantics, let's look at the more generic case where rvalue reference is used as function parameter. 
+
+### rvalue reference as functions parameter
+```C++
+
+```
 
 
 
