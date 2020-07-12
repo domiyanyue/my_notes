@@ -218,4 +218,6 @@ Another good thing here is move semantics (move constructor and move assignment 
 
 ## Summary
 In this article, we took a long short at understanding move semantics in C++:
-1. 
+
+1. The general problem we want to solve is how to transfer the ownership of obects/pointers/variables efficiently withou unnecessary copy.
+2. 
