@@ -45,15 +45,25 @@ Let look at some basic examples:
 int a;
 a = 4;
 ```
-Above is a legal assignment experssion in C++. `a` is an lvalue because it has an identifiable location (using name `a`). Assignment operator expects an lvalue as its left operand, here we store value `4` to the memory location `a` locates. Following are invalid experssions:
+Above is a legal assignment experssion in C++. `a` is an lvalue because it has an identifiable location (using name `a`). An assignment operator expects an lvalue as its left operand, here we store value `4` to the memory location `a` locates. Following are invalid experssions:
 
 ```C++
 3 = 5;
 (a * 2) = 3;
 ```
-It's almost obvious to everyone that the above statments make no sense. Why? The experssion on the left sides `3` and `(a * 2)` don't have identifiable memory locations (which by definition makes them rvalues not lvalues). Assignment operators expects lvalues on the left side, therefore they are illegal statements. In fact, rvalues are temprorary results of expressions, 'temprorary' means you can't locate them after this statement. They evaperates.  
+It's almost too obvious that the above statments make no sense. Why? The experssion on the left sides `3` and `(a * 2)` don't have identifiable memory locations (which by definition makes them rvalues not lvalues). Therefore they are illegal statements. In fact, rvalues are temprorary results of expressions, 'temprorary' means you can't locate them after this statement. Yes, they evaperates.
+In fact, if you put them in a compiler (GCC), you will get an error: 
 
-An rvalue is anything that is not an lvalue. 
+```
+main.cpp:12:9: error: lvalue required as left operand of assignment
+     3 = 5;
+         ^
+main.cpp:13:15: error: lvalue required as left operand of assignment
+     (a * 2) = 3;
+               ^
+```
+Make sense, right? As we said, Assignments operator requires lvalues as left operand.
+
 
 For the discussion of this article, we want to perticularly point out that reference type in C++ are lvalues and can appear on the left side of assignment operator.
 ```C++
