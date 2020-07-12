@@ -64,7 +64,7 @@ main.cpp:13:15: error: lvalue required as left operand of assignment
 ```
 Make sense, right? Because assignments operator requires lvalue as left operand.
 
-### Reference type is lvalue
+### Reference Type is Lvalue
 It's worth pointing out that *reference type in C++ are lvalues* and can appear on the left side of assignment operator.
 ```C++
 int a = 1;
@@ -79,7 +79,7 @@ lookup[2] = "hello";
 ```
 The overloaded `[]` operator for class `std::map` returns a reference type to `string` which is lvalue. This makes index accessing access possible with assignment operator.
 
-### lvalue to rvalue conversion
+### Lvalue to Rvalue Conversion
 In the following example, `+` takes two rvalues as arguments and returns an rvalue.
 ```C++
 int a = 1;
@@ -120,7 +120,7 @@ However, these are not the common use manners of rvalue reference. Rvalue refere
 ## Move Semantics
 In the fisrt example, we identified the unnecessary copy problem. With rvalue reference, we can use move semantics to solve this. Before we build a class that utilize move semantics, let's look at the more generic case where rvalue reference is used as function parameter. 
 
-### rvalue reference as function parameter
+### Rvalue Reference as Function Parameter
 ```C++
 void func(vector<int>&& vec){
     for(int i = 0; i < vec.size(); i++){
