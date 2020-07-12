@@ -89,26 +89,37 @@ int c = a + b;
 We know both `a` and `b` are lvalues. In the third line, they undergo an implicit *lvalue-to-rvalue* conversion. All lvalues that aren't arrays, functions or of incomplete types can be convered to rvalues. However, rvalues can't be converted to lvalues. 
 
 ## Rvalue Reference 
-Prior to C++11, only one type of reference exits in C++: reference or lvalue reference (post C++11). Reference type give us an easy way to refer to the object without copying it. Like in the first example, we can pass in the return value as a reference type. Because of lvalue reference, we can deal lvalue without copying. But what about rvalues? They can only be assigned to non-modifiable lvalue references. For example:
+Prior to C++11, only one type of reference exits in C++: reference or lvalue reference (post C++11). Reference type give us an easy way to refer to the object without copying it. Like in the first example, we can pass in the return value as a reference type. Because of lvalue reference, we can deal with lvalue without copying. But what about rvalues? They can only be assigned to non-modifiable lvalue references. For example:
 
 ```C++
 int& a = 4; // Error, can assign rvalue to a lvalue reference type
 const int& a = 4; // Correct, can assign rvalue to a non-modifiable lvalue reference type
 ```
 
-Rvalue reference is introduced to address this issue. It can only be assigned from a rvalue. 
+Rvalue reference is introduced to address this issue. It can only be assigned from a rvalue. An rvalue reference is created using a double ampersand while an lvalue reference is created using a sinlge ampersand.
 
 ```C++
-// Example: Rvalue Reference
-int main(){
-  
-}
+int x = 5;
+int &lref = x; // lvalue reference initilized with l-value x
+int &&rref = 5; // rvalue reference initilized with rvalue 5
 ```
 
-However, these are not the common use case of rvalue reference, they are 
+*Please notice rvalue reference type is an lvalue as we can see it can appear on the left side of assignment operator*. 
 
+Rvalue reference can be used just like lvalue reference. It expands the life time of a temprorary variable and also make it possible to be modified:
+```C++
+int &&rref = 5;
+std::cout << rref << endl;
+rref = 6;
+std::cout << rref << endl;
+```
+During initilization of rref, a temprorary object is created from literal `5`, the rvalue reference `rref` is referencing the temprorary object (not literal). In the next assignment, we change the value of temprorary object through rvalue reference. 
+
+However, these are not the common use manners of rvalue reference. Rvalue references are more often used as function parameters to create *move constructor* and *move assignment operator*. 
 
 ## Move Semantics
+In the fisrt example, we identified the unnecessary copy problem. With rvalue reference, we can use move semantics to solve this.
+
 
 
 
