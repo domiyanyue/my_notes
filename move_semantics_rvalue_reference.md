@@ -80,7 +80,7 @@ lookup[2] = "hello";
 The overloaded `[]` operator for class `std::map` returns a reference type to `string` which is lvalue. This makes index accessing access possible with assignment operator.
 
 ### lvalue to rvalue conversion
-In the following example, `+` takes two rvalues as argument and returns an rvalue.
+In the following example, `+` takes two rvalues as arguments and returns an rvalue.
 ```C++
 int a = 1;
 int b = 2;
@@ -89,7 +89,7 @@ int c = a + b;
 We know both `a` and `b` are lvalues. In the third line, they undergo an implicit *lvalue-to-rvalue* conversion. All lvalues that aren't arrays, functions or of incomplete types can be convered to rvalues. However, rvalues can't be converted to lvalues. 
 
 ## Rvalue Reference 
-Prior to C++11, only one type of reference exits in C++: reference or lvalue reference (post C++11). Reference type give us an easy way to refer to the object without copying it. Like in the first example, we can pass in the return value as a reference type. Because of lvalue reference, we can deal with lvalue without copying. But what about rvalues? They can only be assigned to non-modifiable lvalue references. For example:
+Prior to C++11, only one type of reference exits in C++: reference or lvalue reference (name post C++11). Reference type give us an easy way to refer to the object without copying it. Like in the first example, we can pass in the return value as a reference type. Because of lvalue reference, we can deal with lvalue without copying. But what about rvalues? They can only be assigned to non-modifiable lvalue references. For example:
 
 ```C++
 int& a = 4; // Error, can assign rvalue to a lvalue reference type
@@ -120,12 +120,102 @@ However, these are not the common use manners of rvalue reference. Rvalue refere
 ## Move Semantics
 In the fisrt example, we identified the unnecessary copy problem. With rvalue reference, we can use move semantics to solve this. Before we build a class that utilize move semantics, let's look at the more generic case where rvalue reference is used as function parameter. 
 
-### rvalue reference as functions parameter
+### rvalue reference as function parameter
 ```C++
+void func(vector<int>&& vec){
+    for(int i = 0; i < vec.size(); i++){
+        vec[i] = 1;
+    }
+    cout << "\n";
+}
+```
+Consider the above function definition. It *takes an argument by ralue reference*, this is optimization for the case where data are intended to be "stolen" from the parameter instead of copying from it. Another way to express this behaviour is the paramemter's ownership is transfered to `func`. It also implies that the value of `vec` after calling this function is unspecified because the ownership has been transfered. Let's see what happens if we call this function:
+```C++
+    func(vector<int>{1,2,3}); // works, the parameter is a temprory rvalue
+    vector<int> v{4,5,6}; 
+    func(v); // error: can't bind an lvalue to rvalue reference type
+```
+This first line is legal since we pass in rvalue created on the fly. The third line is illegal as compiler complained:
+```
+ error: cannot bind ‘std::vector’ lvalue to ‘std::vector&&’
+     func(v);
+           ^
+```
+The compiler refused to cast the lvalue to rvalue implictily. Why? Because passing by rvalue reference indicating the value is not copied but moved and the value after function call is undefined. By making it an error can help programmers making serious mistakes (treaing move as copy). What if we *do want to* change the ownership of the parameter and don't care about the value after function call? C++ provides `std::move` to cast an object to rvalue-reference, enabling moving from it. The following code is legal: 
+```
+    vector<int> v{4,5,6}; 
+    func(std::move(v)); 
+```
+Now we can bind both an rvalue or lvalue (using `std::move`) to a rvalue reference parameter. We will see next how to write a move constructor besides a copy constructor.
 
+### Move Constructor
+As we said, the concept of rvalue reference and move semantics are proposed to solve this problem: creating an constructor that performs move instead of copy. Imagine we have a class that encapsulate an pointer style array, before C++11, we would write it as:
+```C++
+class MyArray{
+public:
+    MyArray(int n){}
+    
+    // copy constructor
+    MyArray(const MyArray& array):
+        m_vals(new int[array.m_size]),
+        m_size(array.m_size),
+        m_name(array.m_name) {
+        for(int i = 0; i < m_size; i++){
+            m_vals[i] = array.m_vals[i];
+        }
+    }
+    
+    ~MyArray(){
+        delete [] m_vals;
+    }
+
+public:
+    int* m_vals = nullptr;
+    int m_size = 0;
+    string m_name = "";
+};
+```
+It includes a default constructor and copy constructor (the simplicity, I didn't include copy assignment operator). Notice the copy constructor performs a lot of work: memory allocation and copying elements. We can add a move constructor to improve the efficiency under certain cases:
+
+```C++
+class MyArray{
+public:
+    MyArray(int n){}
+    
+    // copy constructor
+    MyArray(const MyArray& array):
+        m_vals(new int[array.m_size]),
+        m_size(array.m_size),
+        m_name(array.m_name) {
+        for(int i = 0; i < m_size; i++){
+            m_vals[i] = array.m_vals[i];
+        }
+    }
+
+    // move constructor
+    MyArray(MyArray&& array):
+        m_vals(array.m_vals),
+        m_size(array.m_size),
+        m_name(std::move(array.m_name)){
+        array.m_vals = nullptr;
+        array.m_size = 0;
+    }
+    
+    ~MyArray(){
+        delete [] m_vals;
+    }
+
+public:
+    int* m_vals = nullptr;
+    int m_size = 0;
+    string m_name = "";
+};
 ```
 
+The move constructor is much cheaper than the copy constructor! It simply steals (takes the ownership of) the pointer from the objet it moved from. Notice for object members (`string m_name`), we pass in `std::move(array.m_name)` to trigger the move constructor for `std::string` instead of copy constructor. Remeber `array.name` is lvalue (rvalue reference is lvalue) and needs to be cast explicitly to utilize move constructor. 
 
+Another good thing here is move semantics (move constructor and move assignment operator) has been added to standard library. This means you can efficiently deal with vector, map, string and other standard library objects when dealing with construction or value assignments. If we look back at the example mentioned in the beginning of this article. The second copy of vector can be avoided because line `vector<int> vec_a = createArray(5);` triggered the move assignment operator instead of copy thanks to move semantics support in standard library. 
 
-
-
+## Summary
+In this article, we took a long short at understanding move semantics in C++:
+1. 
