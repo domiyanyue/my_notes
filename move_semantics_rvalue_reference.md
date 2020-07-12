@@ -30,27 +30,28 @@ Before C++11, the above code will generate terrible performance due to copy of a
 function createArray, the second is when we assign the return value to `vec_a` in main function. The first copy can be avoid if compiler applies "return value optimization".
 The second is unavoidable because a copy constructor of vector is called which will allocate memory space for vec_a and copy values from temproary values returned by function createArray. 
 
-The real problem is we don't want to create temprorary objects and copy from it. To avoid it, there are serveral ways C++ programmers can avoid it like returning a pointer to vector or pass in the return value as a reference. Both can save performance issue but are not natural form of programming. 
+The real problem is we don't want to create temprorary objects and copy from it. To avoid it, there are serveral ways C++ programmers can avoid it like returning a pointer to vector or pass in the return value as a reference. Both can save performance issue but are not natural forms of programming. 
 
 Move semantic is introduced to address this, avoid copying when assigning a temprorary value that is about to disappear to another value. Before we introduce move semantic, we have to introduce some concepts to help you understand better - lvalue, rvalues and rvalue references.
 
 ## Lvalues and Rvalues
 
-lvalue and rvalue are "value categories". In C++, each expression has 2 independent properties: value type and value category. Value category defines the basic rule compiler must follow when creating, assigning, copying objects when evaluating the expression.  
+Lvalue and rvalue are **value categories**. In C++, each expression has 2 independent properties: value type and value category. Value category defines some basic rules compiler must follow when creating, assigning, copying objects when evaluating the expression. The actual definition of lvalue and rvalue are shockingly completely. In this article, I will give you a simplified view that is enough for most cases. 
 
-An lvalue represents an object that occupies some identifiable location in memory. For example:
+An **lvalue** represents an object that occupies some identifiable location in memory.
+An **rvalue** is defined by exclusion, by saying an expression is an rvalue if it's not lvalue.
+Let look at some basic examples:
 ```C++
 int a;
 a = 4;
 ```
-This is a legal assignment experssion in C++. `a` is an lvalue because it has an identifiable location (using name `a`). Assignment operator expects an lvalue as its left operand, here we store value `4` to the memory location `a` locates. Following are invalid experssions:
+Above is a legal assignment experssion in C++. `a` is an lvalue because it has an identifiable location (using name `a`). Assignment operator expects an lvalue as its left operand, here we store value `4` to the memory location `a` locates. Following are invalid experssions:
 
 ```C++
 3 = 5;
 (a * 2) = 3;
 ```
-It's almost obvious to everyone that the above statments make no sense. We can explain why from a language perspective. The experssion on the left sides `3` and `(a * 2)` don't
-have identifiable memory location (which by definition makes them rvalues not lvalues). Assignment operators expects lvalues on the left side, therefore they are illegal statements. In fact, rvalues are temprorary results of expressions, 'temprorary' means you can't locate them after this statement. They evaperates.  
+It's almost obvious to everyone that the above statments make no sense. Why? The experssion on the left sides `3` and `(a * 2)` don't have identifiable memory locations (which by definition makes them rvalues not lvalues). Assignment operators expects lvalues on the left side, therefore they are illegal statements. In fact, rvalues are temprorary results of expressions, 'temprorary' means you can't locate them after this statement. They evaperates.  
 
 An rvalue is anything that is not an lvalue. 
 
