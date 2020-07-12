@@ -1,11 +1,11 @@
 # Move Semantics and Rvalue Reference in C++
 
-Move semantics and rvalue reference are two powerful yet confusing features added in C++11. In this article, I am trying explain them to C++ programmers who are new to this concept. 
+Move semantic and rvalue references are two powerful yet confusing features added in C++11. In this article, I am trying to explain them to C++ programmers who are new to this concept. 
 
 ## Problem: Unnecessary Copy of Objects
 
-One of C++'s advantages is it can produce fast programs. However, one problem has existed to slow down C++ programs before C++11: unnecessary copy of objects.
-Take a look at following example:
+One of C++'s advantages is it can produce fast programs. However, one problem has existed to slow down C++ programs before C++11:  unnecessary copying of objects.
+Take a look at the following example:
 
 ```C++
 #include <vector>
@@ -24,8 +24,8 @@ int main(){
 }
 ```
 
-Before C++11, the above code will generate terrible performance due to copy of array ret. There can be up to 2 copies, one is generated when return value is created in
-function createArray, the second is when we assign the return value to `vec_a` in main function. The first copy can be avoid if compiler applies "return value optimization".
+Before C++11, the above code will generate terrible performance due to the copying of array `ret`. There can be up to 2 copies, one is generated when the return value is created in
+function createArray, the second is when we assign the return value to `vec_a` in main function. The first copy can be avoided if the compiler applies "return value optimization".
 The second is unavoidable because a copy constructor of vector is called which will allocate memory space for vec_a and copy values from temproary values returned by function createArray. 
 
 The root problem is we don't want to create temprorary objects and copy from it. To avoid it, there are serveral ways C++ programmers can avoid it like returning a pointer to vector or pass in the return value as a reference. Both can save performance issue but are not natural forms of programming. 
