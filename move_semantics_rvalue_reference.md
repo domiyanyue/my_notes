@@ -30,14 +30,13 @@ Before C++11, the above code will generate terrible performance due to copy of a
 function createArray, the second is when we assign the return value to `vec_a` in main function. The first copy can be avoid if compiler applies "return value optimization".
 The second is unavoidable because a copy constructor of vector is called which will allocate memory space for vec_a and copy values from temproary values returned by function createArray. 
 
-The real problem here is we don't want to create temprorary objects and copy from it. To avoid it, there are serveral ways C++ programmers can avoid it like returning a pointer to vector or pass in the return value as a reference. Both can save performance issue but are not natural form of programming. 
+The real problem is we don't want to create temprorary objects and copy from it. To avoid it, there are serveral ways C++ programmers can avoid it like returning a pointer to vector or pass in the return value as a reference. Both can save performance issue but are not natural form of programming. 
 
 Move semantic is introduced to address this, avoid copying when assigning a temprorary value that is about to disappear to another value. Before we introduce move semantic, we have to introduce some concepts to help you understand better - lvalue, rvalues and rvalue references.
 
 ## Lvalues and Rvalues
 
-lvalue and rvalue are "value categories". In C++, each expression has 2 independent properties: value type and value category. 
-This article by no means give you an detailed exlaination on value categories in C++. 
+lvalue and rvalue are "value categories". In C++, each expression has 2 independent properties: value type and value category. Value category defines the basic rule compiler must follow when creating, assigning, copying objects when evaluating the expression.  
 
 An lvalue represents an object that occupies some identifiable location in memory. For example:
 ```C++
