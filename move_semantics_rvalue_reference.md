@@ -24,7 +24,11 @@ int main(){
 }
 ```
 
-Before C++11, the above code will generate terrible performance due to the copying of array `ret`. There can be up to 2 copies, one is generated when the return value is created in function `createArray`, the second is when we assign the return value to `vec_a` in main function. While first copy can be avoided if the compiler applies "return value optimization", the second is unavoidable because a copy constructor of `std::vector` is called which will allocate memory space for vec_a and copy values from temporary values returned by function `createArray`. 
+Before C++11, the above code will perform terribly due to the copying of array `ret`. There can be up to 2 copies:
+1. One is generated when the return value is created in function `createArray`.
+2. The second is when we assign the return value to `vec_a` in main function. 
+
+While first copy can be avoided if the compiler applies "return value optimization" (and most compiler do), the second is unavoidable because a copy constructor of `std::vector` is called which will allocate memory space for vec_a and copy values from temporary values returned by function `createArray`. 
 
 The root problem is we don't want to create temporary objects and copy from it. To avoid it, there are several ways C++ programmers can avoid it like returning a pointer to vector or pass in the return value as a reference. Both can save performance issues but are not natural forms of programming. 
 
