@@ -1,10 +1,10 @@
 # Move Semantics and Rvalue Reference in C++
 
-Move semantic and rvalue references are two powerful yet confusing features added in C++11. In this article, I will explain them to C++ developers who are new to this concept. 
+Move semantic and rvalue references are two useful yet confusing features added in C++11. In this article, I will explain what they are and why are they needed.
 
 ## Problem: Unnecessary Copy of Objects
 
-One of C++'s advantages is *fast*. However, one problem has existed to slow down C++ programs before C++11:  unnecessary copying of objects.
+One of C++'s main advantages is *fast*. However, one problem has existed to slow down C++ programs before C++11:  unnecessary copy of objects.
 Take a look at the following example:
 
 ```C++
@@ -24,9 +24,7 @@ int main(){
 }
 ```
 
-Before C++11, the above code will generate terrible performance due to the copying of array `ret`. There can be up to 2 copies, one is generated when the return value is created in
-function `createArray`, the second is when we assign the return value to `vec_a` in main function. The first copy can be avoided if the compiler applies "return value optimization".
-The second is unavoidable because a copy constructor of `std::vector` is called which will allocate memory space for vec_a and copy values from temporary values returned by function `createArray`. 
+Before C++11, the above code will generate terrible performance due to the copying of array `ret`. There can be up to 2 copies, one is generated when the return value is created in function `createArray`, the second is when we assign the return value to `vec_a` in main function. While first copy can be avoided if the compiler applies "return value optimization", the second is unavoidable because a copy constructor of `std::vector` is called which will allocate memory space for vec_a and copy values from temporary values returned by function `createArray`. 
 
 The root problem is we don't want to create temporary objects and copy from it. To avoid it, there are several ways C++ programmers can avoid it like returning a pointer to vector or pass in the return value as a reference. Both can save performance issues but are not natural forms of programming. 
 
