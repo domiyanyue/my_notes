@@ -38,7 +38,7 @@ Lvalue and rvalue are **value categories**. In C++, each expression has 2 indepe
 
 An **lvalue** represents an object that occupies some identifiable location in memory.
 An **rvalue** is defined by exclusion, by saying an expression is an rvalue if it's not an lvalue.
-Let's look at some basic examples:
+Here are some basic examples:
 ```C++
 int a;
 a = 4;
