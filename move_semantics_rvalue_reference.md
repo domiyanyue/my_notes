@@ -50,8 +50,7 @@ Above is a legal assignment expression in C++. `a` is an lvalue because it has a
 3 = 5;
 (a * 2) = 3;
 ```
-It's almost too obvious that the above statements make no sense. Why? The expression on the left sides `3` and `(a * 2)` don't have identifiable memory locations (which by definition makes them rvalues according to definition). Therefore they are illegal statements. Rvalues are temporary results of expressions, 'temporary' means you can't locate them after this statement. 
-In fact, if you put them in a compiler (GCC), you will get an error: 
+It's almost too obvious that the above statements make no sense. Why? The expression on the left sides `3` and `(a * 2)` don't have identifiable memory locations (which by definition makes them rvalues according to definition). Therefore they are illegal statements. Rvalues are temporary results of expressions, 'temporary' means you can't locate them after this statement. If you compile them, you will get errors: 
 
 ```
 main.cpp:12:9: error: lvalue required as left operand of assignment
