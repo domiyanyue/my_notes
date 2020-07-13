@@ -30,7 +30,7 @@ The second is unavoidable because a copy constructor of `std::vector` is called 
 
 The root problem is we don't want to create temporary objects and copy from it. To avoid it, there are several ways C++ programmers can avoid it like returning a pointer to vector or pass in the return value as a reference. Both can save performance issues but are not natural forms of programming. 
 
-Move semantic is introduced to address this, avoid copying when assigning a temporary value that is about to disappear. Before we introduce move semantic, we have to introduce some concepts to help you understand better - lvalue, rvalues, and rvalue references.
+Move semantic is introduced to address this, avoid copying when assigning a temporary value that is about to disappear. Before we introduce move semantic, we have to introduce some concepts to help you understand - lvalue, rvalues, and rvalue references.
 
 ## Lvalues and Rvalues
 
