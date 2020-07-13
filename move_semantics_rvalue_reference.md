@@ -75,7 +75,7 @@ One typical example of assigning to reference type is the overloading of bracket
 std::map<int, string> lookup;
 lookup[2] = "hello";
 ```
-The overloaded `[]` operator for class `std::map` returns a reference type to `string` which is an lvalue. This makes index accessing access possible with the assignment operator.
+The overloaded `[]` operator for class `std::map` returns a reference type to `string` which is an lvalue. This makes index accessing possible with the assignment operator.
 
 ### Lvalue to Rvalue Conversion
 In the following example, `+` takes two rvalues as arguments and returns an rvalue.
