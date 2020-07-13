@@ -36,8 +36,9 @@ Move semantic is introduced to address this, avoid copying when assigning a temp
 
 Lvalue and rvalue are **value categories**. In C++, each expression has 2 independent properties: value type and value category. Value category defines some basic rules compiler must follow when creating, assigning, copying objects when evaluating the expression. The actual definition of lvalue and rvalue are shockingly complicated. In this article, I will give you a simplified view that is enough to explain most cases. 
 
-An **lvalue** represents an object that occupies some identifiable location in memory.
-An **rvalue** is defined by exclusion, by saying an expression is an rvalue if it's not an lvalue.
+- An **lvalue** represents an object that occupies some identifiable location in memory.
+- An **rvalue** is defined by exclusion, by saying an expression is an rvalue if it's not an lvalue.
+
 Here are some basic examples:
 ```C++
 int a;
