@@ -30,7 +30,7 @@ Before C++11, the above code will perform terribly due to the copying of array `
 
 While first copy can be avoided if the compiler applies "return value optimization" (and most compiler do), the second is unavoidable because a copy constructor of `std::vector` is called which will allocate memory space for vec_a and copy values from temporary values returned by function `createArray`. 
 
-The root problem is we don't want to create temporary objects and copy from it. To avoid it, there are several ways C++ programmers can avoid it like returning a pointer to vector or pass in the return value as a reference. Both can save performance issues but are not natural forms of programming. 
+To fix the problem of the second copy, we need to code in a way that compiler won't create temporary objects and copy from it. There are several ways C++ programmers often uses like returning a pointer to vector or pass in the return value as a reference. Both can save performance issues but are not natural forms of programming. 
 
 Move semantic is introduced to address this, avoid copying when assigning a temporary value that is about to disappear. Before we introduce move semantic, we have to introduce some concepts to help you understand - lvalue, rvalues, and rvalue references.
 
