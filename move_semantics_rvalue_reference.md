@@ -1,6 +1,6 @@
 # Move Semantics and Rvalue Reference in C++
 
-Move semantics and rvalue reference are two advanced and confusing features added in C++11. In this article, I will explain what they are and why are they needed. Let's start with the main problem they are trying to tackle.
+Move semantics and rvalue reference are two advanced and confusing features added in C++11. In this article, I will explain what they are and why they are needed. Let's start with the main problem they are trying to tackle.
 
 ## Problem: Unnecessary Copy of Objects
 
