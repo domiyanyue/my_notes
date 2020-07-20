@@ -146,7 +146,7 @@ The compiler refused to cast the lvalue to rvalue implicitly. Why? Because passi
     vector<int> v{4,5,6}; 
     func(std::move(v)); 
 ```
-Now we can bind both an rvalue or lvalue (using explicit cast `std::move`) to an rvalue reference parameter. We will see next how to write a move constructor besides a copy constructor.
+Now we can bind both an rvalue or lvalue (using explicit cast `std::move`) to an rvalue reference parameter. We will see next how to write a move constructor.
 
 ### Move Constructor
 As we mentioned in the beginning, rvalue references and move semantics are proposed to solve this problem: creating a constructor that performs move instead of copy. Imagine we have a class that encapsulates an pointer style array, before C++11, we would write it as:
