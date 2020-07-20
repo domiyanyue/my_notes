@@ -223,7 +223,7 @@ MyArray array(createNewArray()); // or MyArray array = createNewArray() if assig
 ```
 The move constructor (or move assignment operator) will be called automatically since return value MyArray is a rvalue and can be cast to rvalue reference directly.
 
-A good news here is move semantics (move constructor and move assignment operator) has been added to the standard library. This means you can efficiently deal with vector, map, string and other standard library objects when dealing with construction or value assignments. In the example mentioned at the beginning of this article, with C++11, the second copy of vector would be avoided because line `vector<int> vec_a = createArray(5);` triggered the move assignment operator instead of copy thanks to move semantics support in the standard library. This is without a single code change! 
+A good news here is move semantics (move constructor and move assignment operator) has been added to the standard library. This means you can efficiently deal with vector, map, string and other standard library objects when dealing with construction or value assignments. In the example mentioned at the beginning of this article, with C++11, the second copy of vector would be avoided because line `vector<int> vec_a = createArray(5);` triggered the move assignment operator instead of copy thanks to move semantics support in the standard library. Efficiency is improved without a single code change! 
 
 ## Summary
 In this article, we took a long-short at understanding move semantics and rvalue reference in C++:
