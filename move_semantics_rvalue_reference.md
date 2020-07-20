@@ -4,7 +4,7 @@ Move semantics and rvalue reference are two advanced and confusing features adde
 
 ## Problem: Unnecessary Copy of Objects
 
-C++'s main advantages is *fast*. However, one problem has existed to slow down C++ programs before C++11:  unnecessary copy of objects.
+C++'s major advantage compared to other programming languages is *fast*. However, one problem has existed to slow down C++ programs before C++11:  unnecessary copy of objects.
 Take a look at the following example:
 
 ```C++
