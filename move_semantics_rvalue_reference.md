@@ -229,8 +229,8 @@ A good news here is move semantics (move constructor and move assignment operato
 In this article, we took a long-short at understanding move semantics and rvalue reference in C++:
 
 1. The problem to solve is how to **transfer the ownership of objects/pointers/variables efficiently without unnecessary copy**.
-2. Lvalue and rvalue are value category defining how compiler views assignment, copy, construction, and parameter passing.
-3. Rvalue reference was introduced to let us declare a reference type to a temporary objects. We can use `std::move` to explicitly cast lvalue to rvalue reference. 
-4. Move semantic is introduced when we pass in a parameter by rvalue reference. No creation of new objects happens.
+2. Lvalue and rvalue are value category defining how compiler views assignment, copy, construction, and parameter passing. Lvalue is an object that has identifiable name in memory. Rvalue is a defined by exclusion, usually it's a temprary object. 
+3. Rvalue reference let us declare a reference type to a temporary objects (rvalues). We can use `std::move` to explicitly cast lvalue to rvalue reference. 
+4. Move semantic is introduced when we pass in a parameter by rvalue reference where no creation of new objects (copying) happens.
 5. We implemented move constructor in a simple class.
 
