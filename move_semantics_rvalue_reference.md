@@ -5,7 +5,7 @@ Move semantics and rvalue reference are two advanced and confusing features adde
 ## Problem: Unnecessary Copy of Objects
 
 C++'s major advantage compared to other programming languages is *it's fast*. However, there had been one problem to slow down C++ programs before C++11: unnecessary copy of objects.
-Take a look at the following example, which create and return a integer array:
+Take a look at the following example, which create and return an integer array:
 
 ```C++
 #include <vector>
@@ -25,12 +25,12 @@ int main(){
 ```
 
 Before C++11, the above code will perform terribly due to the copying of array `ret`. There can be up to 2 copies:
-1. One is generated when the return value is created in function `createArray` (C++ standard requires creating a temprorary new object to hold a function's return value).
+1. One is generated when the return value is created in function `createArray` (C++ standard requires creating a temporary object to hold a function's return value).
 2. The second is when we pass the return value to `vec_a` in main function to `std::vector`'s constructor. 
 
 While first copy can be avoided if the compiler applies "return value optimization" (and most compiler do), the second is unavoidable because a copy constructor of `std::vector` is called which will allocate memory space for vec_a and copy values from temporary values returned by function `createArray`. 
 
-To fix the problem of the second copy, we need to code in a way that compiler won't create temporary objects and copy from it. There are several ways C++ programmers often uses like returning a pointer to vector or pass in the return value as a reference. Both can save performance issues but are not ideas. Using pointers requires developer to explicit manage memory which makes programs prone to memory leak. Using references requires the use to put return value in the argument list, which is not a natural form of programming and can hurt code's reablility.
+To fix the problem of the second copy, we need to code in a way that compiler won't create temporary objects and copy from it. There are several ways C++ programmers often uses like returning a pointer to vector or pass in the return value as a reference. Both can save performance issues but are not ideas. Using pointers requires developer to explicit manage memory which makes programs prone to memory leak. Using references requires the use to put return value in the argument list, which is not a natural form of programming and can hurt code's readability.
 
 Move semantic is introduced to address this issue - avoid copying when assigning a temporary value that is about to disappear. Before we explain move semantic, we have to introduce some concepts to help you understand - lvalue, rvalues, reference, and rvalue references.
 
@@ -170,7 +170,7 @@ The compiler refused to cast the lvalue to rvalue implicitly. Why? Because passi
 Now we can bind both an rvalue or lvalue (using explicit cast `std::move`) to an rvalue reference parameter. We will see next how to write a move constructor.
 
 ### Move Constructor
-As we mentioned in the beginning, rvalue references and move semantics are proposed to solve this problem: reduce unnecessary copying. In that specific case, we need to creat a constructor that performs move instead of copy. Imagine we have a class that encapsulates an pointer style array, before C++11, we would write it as:
+As we mentioned in the beginning, rvalue references and move semantics are proposed to solve this problem: reduce unnecessary copying. In that specific case, we need to create a constructor that performs move instead of copy. Imagine we have a class that encapsulates an pointer style array, before C++11, we would write it as:
 ```C++
 class MyArray{
 public:
@@ -237,7 +237,9 @@ The move constructor is much cheaper than the copy constructor! It simply steals
 ```C++
 
 MyArray createNewArray(){
- ...
+   MyArray ret;
+   ...
+   return ret;
 }
 
 MyArray array(createNewArray()); // or MyArray array = createNewArray() if assignment operator is also implemented
@@ -253,5 +255,5 @@ In this article, we took a long-short at understanding move semantics and rvalue
 2. Lvalue and rvalue are value category defining how compiler views assignment, copy, construction, and parameter passing. Lvalue is an object that has identifiable name in memory. Rvalue is a defined by exclusion, usually it's a temprary object. 
 3. Rvalue reference let us declare a reference type to a temporary objects (rvalues). We can use `std::move` to explicitly cast lvalue to rvalue reference. 
 4. Move semantic is introduced when we pass in a parameter by rvalue reference where no creation of new objects (copying) happens.
-5. We implemented move constructor in a simple class.
+5. We implemented a move constructor in a simple class.
 
