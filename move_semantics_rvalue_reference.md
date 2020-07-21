@@ -1,4 +1,4 @@
-# Move Semantics and Rvalue Reference in C++
+# Move Semantics and Rvalue References in C++
 
 Move semantics and rvalue reference are two advanced and confusing features added in C++11. In this article, I will explain what they are and why they are needed. Let's start with the main problem they are trying to tackle (yes, together).
 
@@ -79,7 +79,7 @@ int c = a + b;
 
 We know both `a` and `b` are lvalues. In the third line, they undergo an implicit *lvalue-to-rvalue* conversion. All lvalues that aren't arrays, functions or of incomplete types can be converted to rvalues. However, rvalues can't be converted to lvalues.  
 
-### Reference
+### References
 A reference ("lvalue reference" since C++11) is a type of C++ variable that can act as an alias to another value. An lvalue reference is created using a single ampersand. In the next example, `refv` is a reference of type int and is an alias to `v`. Changing the value of `refv` is equivalent to modifying `v`.
 
 ```C++
@@ -95,7 +95,7 @@ int& b = a; // b is a reference type and is an alias of a
 b = 2;
 ```
 
-## Rvalue Reference 
+## Rvalue References 
 Prior to C++11, only one type of reference exits in C++: reference or lvalue reference (name post C++11). Reference type gives us an easy way to refer to the object without copying it. In the first example, we can pass in the return value as a reference type like:
 
 ```C++
@@ -114,7 +114,7 @@ int main(){
 }
 ```
 
-Because of lvalue reference, we can efficiently use lvalue by generating an alias without copying. But what about rvalues? They can only be assigned to non-modifiable lvalue references. For example:
+Because of lvalue references, we can efficiently use lvalue by generating an alias without copying. But what about rvalues? They can only be assigned to non-modifiable lvalue references. For example:
 
 ```C++
 int& a = 4; // Error, can not assign rvalue to a lvalue reference type
@@ -274,8 +274,8 @@ In this article, we took a long-short at understanding move semantics and rvalue
 
 1. The problem to solve is how to **transfer the ownership of objects/pointers/variables efficiently without unnecessary copy**.
 2. **Lvalue** and **rvalue** are **value categories** defining how compiler views assignment, copy, construction, and parameter passing. Lvalue is an object that has an identifiable name in memory. Rvalue is defined by exclusion, usually, it's a temporary object. 
-3. **Rvalue reference** let us declare a reference type to temporary objects (rvalues). We can use `std::move` to explicitly cast lvalue to rvalue reference. 
-4. **Move semantic** is introduced when we pass in a parameter by rvalue reference where no creation of new objects (copying) happens.
+3. **Rvalue references** let us declare a reference type to temporary objects (rvalues). We can use `std::move` to explicitly cast lvalue to rvalue reference. 
+4. **Move semantics** are introduced when we pass in a parameter by rvalue reference where no creation of new objects (copying) happens.
 5. We implemented a move constructor in a simple class.
 
 ## Reference
