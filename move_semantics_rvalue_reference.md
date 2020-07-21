@@ -4,8 +4,8 @@ Move semantics and rvalue reference are two advanced and confusing features adde
 
 ## Problem: Unnecessary Copy of Objects
 
-C++'s major advantage compared to other programming languages is it's *fast*. However, there had been one problem to slow down C++ programs before C++11:  unnecessary copy of objects.
-Take a look at the following example:
+C++'s major advantage compared to other programming languages is *it's fast*. However, there had been one problem to slow down C++ programs before C++11: unnecessary copy of objects.
+Take a look at the following example, which create and return a integer array:
 
 ```C++
 #include <vector>
@@ -20,13 +20,13 @@ vector<int> createArray(int n){
 }
 
 int main(){
-  vector<int> vec_a = createArray(5);
+  vector<int> vec_a(createArray(5));
 }
 ```
 
 Before C++11, the above code will perform terribly due to the copying of array `ret`. There can be up to 2 copies:
-1. One is generated when the return value is created in function `createArray`.
-2. The second is when we assign the return value to `vec_a` in main function. 
+1. One is generated when the return value is created in function `createArray` (C++ standard requires creating a temprorary new object to hold a function's return value).
+2. The second is when we pass the return value to `vec_a` in main function to `std::vector`'s constructor. 
 
 While first copy can be avoided if the compiler applies "return value optimization" (and most compiler do), the second is unavoidable because a copy constructor of `std::vector` is called which will allocate memory space for vec_a and copy values from temporary values returned by function `createArray`. 
 
@@ -71,13 +71,6 @@ int a = 1;
 int& b = a; // b is a reference type and is a alias of a 
 b = 2;
 ```
-One typical example of assigning to reference type is the overloading of brackets operator `[]` in some classes like `std::map` to perform index accessing. 
-
-```C++
-std::map<int, string> lookup;
-lookup[2] = "hello";
-```
-The overloaded `[]` operator for class `std::map` returns a reference type to `string` which is an lvalue. This makes index accessing possible with the assignment operator.
 
 ### Lvalue to Rvalue Conversion
 In the following example, `+` takes two rvalues as arguments and returns an rvalue.
