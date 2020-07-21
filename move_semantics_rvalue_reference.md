@@ -196,7 +196,7 @@ public:
     string m_name = "";
 };
 ```
-It includes a default constructor and copy constructor (for simplicity, I didn't include copy assignment operator). Notice the copy constructor performs a lot of work: allocating memory and copying elements. We can add a move constructor to improve efficiency when copy is not necessary:
+It includes a default constructor and copy constructor (for simplicity, I didn't include copy assignment operator). Notice the copy constructor performs a lot of work: allocating memory and copying elements. We can add a move constructor to improve efficiency when copying is not necessary:
 
 ```C++
 class MyArray{
@@ -252,8 +252,8 @@ A good news here is move semantics (move constructor and move assignment operato
 In this article, we took a long-short at understanding move semantics and rvalue reference in C++:
 
 1. The problem to solve is how to **transfer the ownership of objects/pointers/variables efficiently without unnecessary copy**.
-2. Lvalue and rvalue are value category defining how compiler views assignment, copy, construction, and parameter passing. Lvalue is an object that has identifiable name in memory. Rvalue is a defined by exclusion, usually it's a temprary object. 
-3. Rvalue reference let us declare a reference type to a temporary objects (rvalues). We can use `std::move` to explicitly cast lvalue to rvalue reference. 
-4. Move semantic is introduced when we pass in a parameter by rvalue reference where no creation of new objects (copying) happens.
+2. **Lvalue** and **rvalue** are **value categories** defining how compiler views assignment, copy, construction, and parameter passing. Lvalue is an object that has an identifiable name in memory. Rvalue is defined by exclusion, usually, it's a temporary object. 
+3. **Rvalue reference** let us declare a reference type to temporary objects (rvalues). We can use `std::move` to explicitly cast lvalue to rvalue reference. 
+4. **Move semantic** is introduced when we pass in a parameter by rvalue reference where no creation of new objects (copying) happens.
 5. We implemented a move constructor in a simple class.
 
