@@ -66,10 +66,10 @@ main.cpp:13:15: error: lvalue required as left operand of assignment
                ^
 ```
 
-Make sense, right? As we said, assignments operator requires lvalue as the left operand.
+Make sense, right? As we said, the assignment operator requires lvalue as the left operand.
 
 ### Reference
-A reference ("lvalue reference" since C++11) is a type of C++ variable that can acts as an alias to another value. An lvalue reference is created using a single ampersand. In the next example, `refv` is a reference of type int and is a alias to `v`. Changing the value of `refv` is equivalent to modifying `v`.
+A reference ("lvalue reference" since C++11) is a type of C++ variable that can act as an alias to another value. An lvalue reference is created using a single ampersand. In the next example, `refv` is a reference of type int and is an alias to `v`. Changing the value of `refv` is equivalent to modifying `v`.
 
 ```C++
 int v = 3;
@@ -80,7 +80,7 @@ refv = 5;
 It's worth pointing out that *reference type in C++ are lvalues* and can appear on the left side of the assignment operator.
 ```C++
 int a = 1;
-int& b = a; // b is a reference type and is a alias of a 
+int& b = a; // b is a reference type and is an alias of a 
 b = 2;
 ```
 
@@ -96,7 +96,7 @@ int c = a + b;
 We know both `a` and `b` are lvalues. In the third line, they undergo an implicit *lvalue-to-rvalue* conversion. All lvalues that aren't arrays, functions or of incomplete types can be converted to rvalues. However, rvalues can't be converted to lvalues.  
 
 ## Rvalue Reference 
-Prior to C++11, only one type of reference exits in C++: reference or lvalue reference (name post C++11). Reference type give us an easy way to refer to the object without copying it. In the first example, we can pass in the return value as a reference type like:
+Prior to C++11, only one type of reference exits in C++: reference or lvalue reference (name post C++11). Reference type gives us an easy way to refer to the object without copying it. In the first example, we can pass in the return value as a reference type like:
 
 ```C++
 #include <vector>
@@ -131,7 +131,7 @@ int &&rref = 5; // rvalue reference initilized with rvalue 5
 
 *Please notice rvalue reference type is an lvalue as we can see it can appear on the left side of assignment operator*. 
 
-Rvalue reference can be used just like lvalue reference. It expands the life time of a temprorary variable and also make it possible to be modified:
+Rvalue reference can be used just like lvalue reference. It expands the lifetime of a temporary variable and also makes it possible to be modified:
 
 ```C++
 int &&rref = 5;
@@ -161,7 +161,7 @@ void func(vector<int>&& vec){
 
 ```
 
-This is an optimization where the parameter `vec` is not copied. `vec` is just an alisa of some other rvalue variable. Another way to describe is the parameter's ownership is transferred through calling `func`. The value of argument `vec` after calling this function is unspecified because the ownership has been transferred. Let's see what happens if we call this function:
+This is an optimization where the parameter `vec` is not copied. `vec` is just an alias of some other rvalue variable. Another way to describe is the parameter's ownership is transferred through calling `func`. The value of argument `vec` after calling this function is unspecified because the ownership has been transferred. Let's see what happens if we call this function:
 
 ```C++
     func(vector<int>{1,2,3}); // works, the parameter is a temporary rvalue
@@ -187,7 +187,7 @@ The compiler refused to cast the lvalue to rvalue implicitly. Why? Because passi
 Now we can bind both an rvalue or lvalue (using explicit cast `std::move`) to an rvalue reference parameter. We will see next how to write a move constructor.
 
 ### Move Constructor
-As we mentioned in the beginning, rvalue references and move semantics are proposed to solve this problem: reduce unnecessary copying. In that specific case, we need to create a constructor that performs move instead of copy. Imagine we have a class that encapsulates an pointer style array, before C++11, we would write it as:
+As we mentioned in the beginning, rvalue references and move semantics are proposed to solve this problem: reduce unnecessary copying. In that specific case, we need to create a constructor that performs move instead of copy. Imagine we have a class that encapsulates a pointer style array, before C++11, we would write it as:
 
 ```C++
 class MyArray{
@@ -267,7 +267,7 @@ MyArray array(createNewArray()); // or MyArray array = createNewArray() if assig
 
 The move constructor (or move assignment operator) will be called automatically since return value MyArray is a rvalue and can be cast to rvalue reference directly.
 
-A good news here is move semantics (move constructor and move assignment operator) has been added to the standard library. This means you can efficiently deal with vector, map, string and other standard library objects when dealing with construction or value assignments. In the example mentioned at the beginning of this article, with C++11, the second copy of vector would be avoided because line `vector<int> vec_a = createArray(5);` triggered the move assignment operator instead of copy thanks to move semantics support in the standard library. Efficiency is improved without a single code change! 
+The good news here is move semantics (move constructor and move assignment operator) has been added to the standard library. This means you can efficiently deal with vector, map, string and other standard library objects when dealing with construction or value assignments. In the example mentioned at the beginning of this article, with C++11, the second copy of vector would be avoided because line `vector<int> vec_a = createArray(5);` triggered the move assignment operator instead of copy thanks to move semantics support in the standard library. Efficiency is improved without a single code change! 
 
 ## Summary
 In this article, we took a long-short at understanding move semantics and rvalue reference in C++:
