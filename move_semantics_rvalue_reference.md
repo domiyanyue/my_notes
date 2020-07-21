@@ -32,7 +32,7 @@ While first copy can be avoided if the compiler applies "return value optimizati
 
 To fix the problem of the second copy, we need to code in a way that compiler won't create temporary objects and copy from it. There are several ways C++ programmers often uses like returning a pointer to vector or pass in the return value as a reference. Both can save performance issues but are not ideas. Using pointers requires developer to explicit manage memory which makes programs prone to memory leak. Using references requires the use to put return value in the argument list, which is not a natural form of programming and can hurt code's reablility.
 
-Move semantic is introduced to address this issue - avoid copying when assigning a temporary value that is about to disappear. Before we explain move semantic, we have to introduce some concepts to help you understand - lvalue, rvalues, and rvalue references.
+Move semantic is introduced to address this issue - avoid copying when assigning a temporary value that is about to disappear. Before we explain move semantic, we have to introduce some concepts to help you understand - lvalue, rvalues, reference, and rvalue references.
 
 ## Lvalues and Rvalues
 
@@ -64,7 +64,15 @@ main.cpp:13:15: error: lvalue required as left operand of assignment
 ```
 Make sense, right? As we said, assignments operator requires lvalue as the left operand.
 
-### Reference Type is Lvalue
+### Reference
+A reference ("lvalue reference" since C++11) is a type of C++ variable that can acts as an alias to another value. An lvalue reference is created using a single ampersand. In the next example, `refv` is a reference of type int and is a alias to `v`. Changing the value of `refv` is equivalent to modifying `v`.
+
+```C++
+int v = 3;
+int& refv = v;
+refv = 5;
+```
+
 It's worth pointing out that *reference type in C++ are lvalues* and can appear on the left side of the assignment operator.
 ```C++
 int a = 1;
@@ -82,14 +90,31 @@ int c = a + b;
 We know both `a` and `b` are lvalues. In the third line, they undergo an implicit *lvalue-to-rvalue* conversion. All lvalues that aren't arrays, functions or of incomplete types can be converted to rvalues. However, rvalues can't be converted to lvalues.  
 
 ## Rvalue Reference 
-Prior to C++11, only one type of reference exits in C++: reference or lvalue reference (name post C++11). Reference type give us an easy way to refer to the object without copying it. In the first example, we can pass in the return value as a reference type. Because of lvalue reference, we can deal with lvalue without copying. But what about rvalues? They can only be assigned to non-modifiable lvalue references. For example:
+Prior to C++11, only one type of reference exits in C++: reference or lvalue reference (name post C++11). Reference type give us an easy way to refer to the object without copying it. In the first example, we can pass in the return value as a reference type like:
+```C++
+#include <vector>
+using namespace std;
+
+void createArray(int n, vector<int>& vec){
+  for(int i = 0; i < n; i++){
+    ret.push_back(i * i);
+  }
+}
+
+int main(){
+  vector<int> vec_a;
+  createArray(5,vec_a);
+}
+```
+
+Because of lvalue reference, we can efficiently use lvalue by generating an alias without copying. But what about rvalues? They can only be assigned to non-modifiable lvalue references. For example:
 
 ```C++
 int& a = 4; // Error, can not assign rvalue to a lvalue reference type
 const int& a = 4; // Correct, can assign rvalue to a non-modifiable lvalue reference type
 ```
 
-Rvalue reference is introduced to address this issue. It can only be assigned from an rvalue. An rvalue reference is created using a double ampersand while an lvalue reference is created using a single ampersand.
+Rvalue reference is introduced to address this issue. It can only be assigned from an rvalue. An rvalue reference is created using a double ampersand.
 
 ```C++
 int x = 5;
