@@ -30,7 +30,7 @@ Before C++11, the above code will perform terribly due to the copying of array `
 
 While first copy can be avoided if the compiler applies "return value optimization" (and most compiler do), the second is unavoidable because a copy constructor of `std::vector` is called which will allocate memory space for vec_a and copy values from temporary values returned by function `createArray`. 
 
-To fix the problem of the second copy, we need to code in a way that compiler won't create temporary objects and copy from it. There are several ways C++ programmers often uses like returning a pointer to vector or pass in the return value as a reference. Both can save performance issues but are not ideas. Using pointers requires developer to explicit manage memory which makes programs prone to memory leak. Using references requires the use to put return value in the argument list, which is not a natural form of programming and can hurt code's readability.
+To fix the problem of the second copy, we need to code in a way that compiler won't create temporary objects and copy from it. There are several ways C++ programmers often uses like returning a pointer to vector or pass in the return value as a reference. Both can save performance issues but are not ideas. Using pointers requires developers to explicitly manage memory which makes programs prone to memory leaks. Using references requires the user to put return value in the argument list, which is not a natural form of programming and can hurt the code's readability.
 
 Move semantic is introduced to address this issue - avoid copying when assigning a temporary value that is about to disappear. Before we explain move semantic, we have to introduce some concepts to help you understand - lvalue, rvalues, reference, and rvalue references.
 
@@ -55,7 +55,7 @@ Above is a legal assignment expression in C++. `x` is an lvalue because it has a
 (a * 2) = 3;
 ```
 
-It's almost too obvious that the above code make no sense. Why? The expression on the left sides `3` and `(a * 2)` don't have identifiable memory locations (which by definition makes them rvalues). Therefore they are illegal statements. Rvalues are temporary results of expressions, 'temporary' means you can't locate(or use) them after this statement. If you compile them, you will get errors: 
+It's almost too obvious that the above code makes no sense. Why? The expression on the left sides `3` and `(a * 2)` don't have identifiable memory locations (which by definition makes them rvalues). Therefore they are illegal statements. Rvalues are temporary results of expressions, 'temporary' means you can't locate(or use) them after this statement. If you compile them, you will get errors: 
 
 ```
 main.cpp:12:9: error: lvalue required as left operand of assignment
@@ -146,7 +146,7 @@ However, these are not the common use of manners of rvalue reference. Rvalue ref
 
 ## Move Semantics
 In the first example, we identified the unnecessary copy problem. With rvalue reference, we can use move semantics to solve this.
-Essentially, we want to pass the parameter(return value of the `createArray`) to `std::vector`'s constructor without copying it. Class constructor is a specical case of function call. Let's first look at the general case where rvalue reference is used as a normal function parameter. 
+Essentially, we want to pass the parameter(return value of the `createArray`) to `std::vector`'s constructor without copying it. Class constructor is a special case of function call. Let's first look at the general case where rvalue reference is used as a normal function parameter. 
 
 ### Rvalue Reference as Function Parameter
 In the following example, we declare a function that *takes an argument by rvalue reference*.
