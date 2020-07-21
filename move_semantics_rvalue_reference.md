@@ -136,9 +136,11 @@ During the initialization of `rref`, a temporary object is created from literal 
 However, these are not the common use of manners of rvalue reference. Rvalue references are more often used as function parameters to create *move constructor* and *move assignment operator*. 
 
 ## Move Semantics
-In the first example, we identified the unnecessary copy problem. With rvalue reference, we can use move semantics to solve this. Before we build a class that utilizes move semantics, let's look at the more generic case where rvalue reference is used as a function parameter. 
+In the first example, we identified the unnecessary copy problem. With rvalue reference, we can use move semantics to solve this.
+Essentially, we want to pass the parameter(return value of the `createArray`) to `std::vector`'s constructor without copying it. Class constructor is a specical case of function call. Let's first look at the general case where rvalue reference is used as a normal function parameter. 
 
 ### Rvalue Reference as Function Parameter
+In the following example, we declare a function that *takes an argument by rvalue reference*.
 ```C++
 void func(vector<int>&& vec){
     for(int i = 0; i < vec.size(); i++){
@@ -146,8 +148,9 @@ void func(vector<int>&& vec){
     }
     cout << "\n";
 }
+
 ```
-Consider the above function definition. It *takes an argument by rvalue reference*, this is an optimization for the case where data are intended to be "stolen"(or move) from the parameter instead of copying from it. Another way to describe is the parameter's ownership is transferred to `vec`. It also implies that the value of argument `vec` after calling this function is unspecified because the ownership has been transferred. Let's see what happens if we call this function:
+This is an optimization where the parameter `vec` is not copied. `vec` is just an alisa of some other rvalue variable. Another way to describe is the parameter's ownership is transferred through calling `func`. The value of argument `vec` after calling this function is unspecified because the ownership has been transferred. Let's see what happens if we call this function:
 ```C++
     func(vector<int>{1,2,3}); // works, the parameter is a temporary rvalue
     vector<int> v{4,5,6}; 
@@ -167,7 +170,7 @@ The compiler refused to cast the lvalue to rvalue implicitly. Why? Because passi
 Now we can bind both an rvalue or lvalue (using explicit cast `std::move`) to an rvalue reference parameter. We will see next how to write a move constructor.
 
 ### Move Constructor
-As we mentioned in the beginning, rvalue references and move semantics are proposed to solve this problem: creating a constructor that performs move instead of copy. Imagine we have a class that encapsulates an pointer style array, before C++11, we would write it as:
+As we mentioned in the beginning, rvalue references and move semantics are proposed to solve this problem: reduce unnecessary copying. In that specific case, we need to creat a constructor that performs move instead of copy. Imagine we have a class that encapsulates an pointer style array, before C++11, we would write it as:
 ```C++
 class MyArray{
 public:
