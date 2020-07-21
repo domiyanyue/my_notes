@@ -68,6 +68,17 @@ main.cpp:13:15: error: lvalue required as left operand of assignment
 
 Make sense, right? As we said, the assignment operator requires lvalue as the left operand.
 
+### Lvalue to Rvalue Conversion
+In the following example, `+` takes two rvalues as arguments and returns an rvalue.
+
+```C++
+int a = 1;
+int b = 2;
+int c = a + b;
+```
+
+We know both `a` and `b` are lvalues. In the third line, they undergo an implicit *lvalue-to-rvalue* conversion. All lvalues that aren't arrays, functions or of incomplete types can be converted to rvalues. However, rvalues can't be converted to lvalues.  
+
 ### Reference
 A reference ("lvalue reference" since C++11) is a type of C++ variable that can act as an alias to another value. An lvalue reference is created using a single ampersand. In the next example, `refv` is a reference of type int and is an alias to `v`. Changing the value of `refv` is equivalent to modifying `v`.
 
@@ -83,17 +94,6 @@ int a = 1;
 int& b = a; // b is a reference type and is an alias of a 
 b = 2;
 ```
-
-### Lvalue to Rvalue Conversion
-In the following example, `+` takes two rvalues as arguments and returns an rvalue.
-
-```C++
-int a = 1;
-int b = 2;
-int c = a + b;
-```
-
-We know both `a` and `b` are lvalues. In the third line, they undergo an implicit *lvalue-to-rvalue* conversion. All lvalues that aren't arrays, functions or of incomplete types can be converted to rvalues. However, rvalues can't be converted to lvalues.  
 
 ## Rvalue Reference 
 Prior to C++11, only one type of reference exits in C++: reference or lvalue reference (name post C++11). Reference type gives us an easy way to refer to the object without copying it. In the first example, we can pass in the return value as a reference type like:
@@ -278,3 +278,8 @@ In this article, we took a long-short at understanding move semantics and rvalue
 4. **Move semantic** is introduced when we pass in a parameter by rvalue reference where no creation of new objects (copying) happens.
 5. We implemented a move constructor in a simple class.
 
+## Reference
+[1] Understanding lvalues and rvalues in C and C++
+[2] Value Categories: Lvalues and Rvalues (C++)
+[3] Rvalue References and Move Semantics in C++11
+[4] C++ rvalue references and move semantics for beginners
