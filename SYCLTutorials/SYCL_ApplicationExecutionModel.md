@@ -1,7 +1,7 @@
 # SYCL Application Execution Model
 
 The execution of SYCL program include two parts: **SYCL kernel functions** and **SYCL application** (execute on host).
-SYCL application that execute on the host is governed by the *SYCL Application Execution Model*. We focus on this part in this article. 
+SYCL application that execute on the host is governed by the *SYCL Application Execution Model* which is what We focus on in this article. 
 
 ## What is SYCL Application Execution Model
 
