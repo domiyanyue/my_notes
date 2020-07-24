@@ -13,13 +13,15 @@ We will address them one by one.
 
 ## Representaion of Hetergoneous devices
 Three concepts are introduced for this problem:
+
 **Platfrom**: A platform is a given hardware vendor's runtime and devices. 
+
 
 **Context**
 
+
 **Devices**
 
-## 
 
 
 
