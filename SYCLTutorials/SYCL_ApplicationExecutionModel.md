@@ -5,7 +5,7 @@ SYCL application that execute on the host is governed by the *SYCL Application E
 
 ## What is SYCL Application Execution Model
 
-As the host part of a heterogeous computing model, the following must be clearly defined:
+As the host part of a heterogeous computing model, the following must be clearly defined in the execution model:
 1. How hetergoneous devices are represented?  
 2. How to specify a device where certain kernel will be running on? 
 3. What's the order of execution?
