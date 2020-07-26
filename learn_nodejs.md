@@ -15,3 +15,9 @@ module.exports.<external name> = <var/func name>;
 ```Javascript
 var logger = require('./logger');
 ```
+
+better to use in recent version:
+
+```Javascript
+const logger = require('./logger');
+```
