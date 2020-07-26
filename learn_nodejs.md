@@ -22,3 +22,4 @@ better to use in recent version:
 const logger = require('./logger');
 ```
 6. use `jshint` to get sugestions on modifying JS file.
+7. Module wrapper function is created automatically for each module.
