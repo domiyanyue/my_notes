@@ -11,3 +11,7 @@ console.log(module);
 ```Javascript
 module.exports.<external name> = <var/func name>;
 ```
+5. use `require` to import module
+```Javascript
+var logger = require('./logger');
+```
