@@ -21,3 +21,4 @@ better to use in recent version:
 ```Javascript
 const logger = require('./logger');
 ```
+6. use `jshint` to get sugestions on modifying JS file.
