@@ -9,5 +9,5 @@ console.log(module);
 ```
 4. module object has a field "exports".
 ```Javascript
-module.exports.log = <var/func name>;
+module.exports.<external name> = <var/func name>;
 ```
